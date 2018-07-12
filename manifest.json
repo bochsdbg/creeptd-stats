@@ -1,0 +1,28 @@
+{
+    "manifest_version": 2,
+    "name": "CreepTD Statistics",
+    "version": "1.0",
+
+    "description": "Replaces flash-based graphs with JS-based on game statistics pages",
+
+    "icons" : {
+        "16": "icon16.png",
+        "24": "icon24.png",
+        "32": "icon32.png",
+        "48": "icon48.png",
+        "96": "icon96.png"
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["*://*.creeptd.com/*/games/*"],
+            "js": ["inject.js"]
+        }
+    ],
+
+    "web_accessible_resources": [
+        "creeptd-stats.js",
+        "dygraph.js",
+        "style.css"
+    ]
+}

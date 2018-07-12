@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="95.25mm" height="95.25mm" version="1.1" viewBox="0 0 95.25 95.25" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(-42.333 -32.417)">
+  <path d="m42.333 32.417h95.25v95.25h-95.25z" stroke-width=".1927"/>
+  <g fill="#f00" stroke-width=".92641" style="font-feature-settings:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal" aria-label="TD">
+   <path d="m101.59 93.66v-23.901h-6.3365v-3.335h16.379v3.335h-6.3365v23.901z" style="font-feature-settings:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal"/>
+   <path d="m115.66 93.66v-27.236h8.1152q2.4086 0 4.2614 1.0746 1.7416 1.0005 2.8533 2.9274 1.4452 2.4827 1.4452 6.1513v6.9294q0 3.6685-1.4452 6.1513-1.1117 1.9269-2.8533 2.9274-1.8528 1.0746-4.2614 1.0746zm3.7056-3.335h4.4096q1.1858 0 2.1492-0.55584 1.0005-0.55584 1.7046-1.7416 1.0005-1.7787 1.0005-4.5208v-6.9294q0-2.7421-1.0005-4.5208-0.70406-1.1858-1.7046-1.7416-0.96345-0.55584-2.1492-0.55584h-4.4096z" style="font-feature-settings:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal"/>
+  </g>
+  <path d="m92.341 57.441-21.558 22.6 21.558 22.6h-21.558l-21.558-22.6 21.558-22.6z" fill="none" stroke="#0f0" stroke-width="2.3174"/>
+  <g fill="#fff" style="font-feature-settings:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal" aria-label="S">
+   <path d="m104.1 63.263q-3.1498 0-5.263-1.236-1.7145-0.9569-2.7112-2.7112-0.67781-1.236-0.87716-2.5517l3.8675-0.83729q0.07974 0.83729 0.51832 1.555 0.55819 0.9569 1.4752 1.5151 1.236 0.67781 2.9903 0.67781 1.8341 0 3.0701-0.71768 0.91704-0.51832 1.3955-1.3556 0.51832-0.87716 0.51832-1.8739 0-1.1164-0.59806-2.153-0.75755-1.3556-2.5517-2.3923-0.75755-0.43858-2.2726-1.0765-2.3125-0.99677-3.389-1.6347-2.5119-1.4354-3.708-3.5485-1.1164-1.9138-1.1164-3.9871 0-1.9935 0.9569-3.708 0.99677-1.6746 2.7112-2.6714 2.153-1.236 5.3028-1.236 3.1498 0 5.263 1.236 1.7144 0.9569 2.7112 2.7112 0.6778 1.236 0.87716 2.5517l-3.8675 0.83729q-0.0797-0.83729-0.51832-1.555-0.5582-0.9569-1.4752-1.5151-1.236-0.67781-2.9903-0.67781-1.8341 0-3.0701 0.71768-0.91704 0.51832-1.4354 1.3955-0.47845 0.83729-0.47845 1.8341 0 1.1164 0.59807 2.153 0.75754 1.3556 2.5517 2.3923 0.75754 0.43858 2.2726 1.0765 2.3125 0.99677 3.389 1.6347 2.5119 1.4354 3.708 3.5485 1.1164 1.9138 1.1164 3.9871 0 1.9935-0.9569 3.708-0.99677 1.6746-2.7112 2.6714-2.153 1.236-5.3028 1.236z" fill="#fff" stroke-width=".2" style="font-feature-settings:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal"/>
+  </g>
+  <g fill="#fff" stroke-width=".89411" style="font-feature-settings:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal" aria-label="AT">
+   <path d="m95.25 124.94v-2.6466q0-7.1172 6.1158-23.64h3.5765q6.1158 16.523 6.1158 23.64v2.6466h-3.5765v-2.6466q0-1.5736-0.28612-3.6122h-8.0828q-0.28612 2.0386-0.28612 3.6122v2.6466zm11.409-9.4776q-1.0729-5.3647-3.5049-13.126-2.432 7.7609-3.5049 13.126z" style="font-feature-settings:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal"/>
+   <path d="m121.06 124.94v-23.068h-6.1157v-3.2188h15.808v3.2188h-6.1157v23.068z" style="font-feature-settings:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal"/>
+  </g>
+ </g>
+</svg>
