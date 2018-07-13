@@ -340,8 +340,6 @@ var addChart = function(parentElem, chart) {
     return g;
 };
 
-stats_div.innerHTML = '<p class="stat-info">Mouse whell on charts for zoomming, click and drag for panning, double click for toggling logarithmic scale</p>';
-
 window.addEventListener('load', function() {
     var game_stats_div = document.querySelectorAll('.cbox50')[1];
     if (game_stats_div != null) {
@@ -398,11 +396,13 @@ window.addEventListener('load', function() {
         new Dygraph(game_stats_div, values, opts);
     }
 
-
-    var gs   = charts.map(function(chart) {
-        return addChart(stats_div, chart);
-    });
-    var sync = Dygraph.synchronize(gs, {selection: true, zoom: true, range: false});
-    // for (var i = 0; i < charts.length; ++i) { ; }
+    // bugged games will contain no chart data
+    if (charts.length !== 0) {
+        stats_div.innerHTML = '<p class="stat-info">Mouse whell on charts for zoomming, click and drag for panning, double click for toggling logarithmic scale</p>';
+        var gs   = charts.map(function(chart) {
+            return addChart(stats_div, chart);
+        });
+        var sync = Dygraph.synchronize(gs, {selection: true, zoom: true, range: false});
+    }
 }, false);
 })();
