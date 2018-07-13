@@ -244,8 +244,8 @@ var optsFromChart = function(chart) {
         labelsSeparateLines: true,
 
         panEdgeFraction: 0.0001,
-        xRangePad: 5,
-        yRangePad: 5,
+        xRangePad: 0,
+        yRangePad: 0,
         // strokeBorderColor: '#000',
         // strokeBorderWidth: 1,
         strokeWidth: 1,
@@ -314,7 +314,7 @@ var addChart = function(parentElem, chart) {
     var data       = dataFromChart(chart_data);
     var opts       = optsFromChart(chart_data);
 
-    opts.title  = chart.title;
+    opts.ylabel  = chart.title;
     opts.width  = '100%';
     opts.height = chart.height;
 
