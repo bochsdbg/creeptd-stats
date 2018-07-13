@@ -11,7 +11,7 @@ rule svgrender
     command = inkscape -z -e $out $in -w $$(basename -s .png $out) -h $$(basename -s .png $out)
 
 rule zip
-    command = rm $out && cd dist && zip -9 $out $in
+    command = bsdtar cvf $out --strip-components 1 -a $in
 
 build dist/manifest.json: copy src/manifest.json
 
@@ -28,4 +28,6 @@ build dist/creeptd-stats.js: jsmin src/creeptd-stats.js
 build dist/inject.js: jsmin src/inject.js
 build dist/dygraph.js: jsmin src/dygraph.js
 
-build dist/style.css : cssmin src/style.css
+build dist/style.css: cssmin src/style.css
+
+build creeptd-stats.zip: zip dist/manifest.json dist/icons/ dist/creeptd-stats.js dist/inject.js dist/dygraph.js dist/style.css
