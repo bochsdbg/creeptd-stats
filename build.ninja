@@ -1,17 +1,17 @@
 rule copy
-    command = cp $in $out
+    command = cp -r $in $out
 
 rule jsmin
-    command = uglifyjs $in -c -m -o $out
+    command = npx webpack --mode production -o $out  --entry ./$in --silent
 
 rule cssmin
     command = cssnano $in $out
 
 rule svgrender
-    command = inkscape -z -e $out $in -w $$(basename -s .png $out) -h $$(basename -s .png $out)
+    command = inkscape -z -e $out $in -w $$(basename -s .png $out) -h $$(basename -s .png $out) >/dev/null && optipng -o7 $out -silent
 
 rule zip
-    command = bsdtar cvf $out --strip-components 1 -a $in
+    command = bsdtar cvf $out --strip-components 1 -a $in 2>/dev/null
 
 build dist/manifest.json: copy src/manifest.json
 
@@ -26,8 +26,9 @@ build dist/icons/256.png: svgrender src/icon.svg
 
 build dist/creeptd-stats.js: jsmin src/creeptd-stats.js
 build dist/inject.js: jsmin src/inject.js
-build dist/dygraph.js: jsmin src/dygraph.js
 
 build dist/style.css: cssmin src/style.css
 
-build creeptd-stats.zip: zip dist/manifest.json dist/icons/ dist/creeptd-stats.js dist/inject.js dist/dygraph.js dist/style.css
+build dist/_locales: copy src/_locales
+
+build creeptd-stats.zip: zip dist/manifest.json dist/creeptd-stats.js dist/inject.js dist/style.css dist/icons/16.png dist/icons/24.png dist/icons/32.png dist/icons/48.png dist/icons/64.png dist/icons/96.png dist/icons/128.png dist/icons/256.png dist/_locales

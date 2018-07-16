@@ -1,4 +1,6 @@
-(function() {
+import * as utils from './utils';
+import Dygraph from '../third-party/dygraphs/src/dygraph';
+import synchronize from '../third-party/dygraphs/src/extras/synchronizer';
 
 var content_div        = document.getElementById('content');
 var stats_div          = content_div.children[content_div.children.length - 1];
@@ -6,20 +8,6 @@ var stats_div_children = stats_div.querySelectorAll('h3,script');
 
 var charts        = [];
 var current_chart = {};
-
-var darkenColor =
-    function(colorStr) {
-    // Defined in dygraph-utils.js
-    var color = Dygraph.toRGB_(colorStr);
-    color.r = Math.round(color.r / 2);
-    color.g = Math.round(color.g / 2);
-    color.b = Math.round(color.b / 2);
-    // color.r   = Math.floor((255 + color.r) / 2);
-    // color.g   = Math.floor((255 + color.g) / 2);
-    // color.b   = Math.floor((255 + color.b) / 2);
-    return 'rgb(' + color.r + ',' + color.g + ',' + color.b + ')';
-}
-
 
 var multiColumnBarPlotter =
     function(e) {
@@ -46,7 +34,7 @@ var multiColumnBarPlotter =
 
     var fillColors   = g.getColors();
     var strokeColors = [];
-    for (var i = 0; i < fillColors.length; i++) { strokeColors.push(darkenColor(fillColors[i])); }
+    for (var i = 0; i < fillColors.length; i++) { strokeColors.push(utils.darkenColor(fillColors[i])); }
 
     var max_yvals = new Array(sets[0].length).fill(0);
     for (var i = 0; i < sets.length; ++i) {
@@ -334,7 +322,7 @@ var addChart = function(parentElem, chart) {
             }
         }
 
-        g.setAnnotations(annotations);
+        g.setAnnotations(annotations, false);
     });
 
     return g;
@@ -346,6 +334,7 @@ window.addEventListener('load', function() {
         var script_elem = game_stats_div.querySelector('script');
         var script_text = getTextNodeValue(script_elem);
         var matches     = /\(\s*"(\w+)/.exec(script_text);
+        /* @extern chart_data */
         var chart_data  = window[matches[1]];
 
         var columns = [];
@@ -365,12 +354,12 @@ window.addEventListener('load', function() {
         opts.plotter = multiColumnBarPlotter;
         opts.width   = '100%';
         opts.height  = 120;
-        opts.labels  = chart_data.x_axis.labels.labels.map(function(x) {
-            return x.text;
+        opts.labels  = chart_data['x_axis'].labels.labels.map(function(x) {
+            return x['text'];
         });
         opts.labels.unshift('Num');
-        opts.colors         = chart_data.x_axis.labels.labels.map(function(x) {
-            return x.colour;
+        opts.colors         = chart_data['x_axis'].labels.labels.map(function(x) {
+            return x['colour'];
         });
         opts.pixelsPerLabel = 90;
         opts.xRangePad      = 100;
@@ -402,7 +391,6 @@ window.addEventListener('load', function() {
         var gs   = charts.map(function(chart) {
             return addChart(stats_div, chart);
         });
-        var sync = Dygraph.synchronize(gs, {selection: true, zoom: true, range: false});
+        var sync = synchronize(gs, {selection: true, zoom: true, range: false});
     }
 }, false);
-})();

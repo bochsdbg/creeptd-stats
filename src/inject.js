@@ -15,6 +15,6 @@ function addCss(url) {
 }
 
 addCss('style.css');
-addScript('dygraph.js');
+// addScript('dygraph.js');
 // addScript('synchronizer.js');
 addScript('creeptd-stats.js');
