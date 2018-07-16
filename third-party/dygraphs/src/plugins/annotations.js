@@ -132,6 +132,7 @@ annotations.prototype.didDrawChart = function(e) {
     div.title = p.annotation.text;
     div.style.color = g.colorsMap_[p.name];
     div.style.borderColor = g.colorsMap_[p.name];
+    div.style.background = g.colorsMap_[p.name];
     a.div = div;
 
     g.addAndTrackEvent(div, 'click',
