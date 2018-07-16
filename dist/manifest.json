@@ -1,10 +1,11 @@
 {
     "manifest_version": 2,
-    "name": "CreepTD Statistics",
+    "name": "__MSG_extensionName__",
     "short_name": "creeptd-stats",
     "version": "1.1.1",
+    "homepage_url": "https://github.com/bochsdbg/creeptd-stats",
 
-    "description": "Replaces flash with pure JS-based charts on game statistics pages and makes them better",
+    "description": "__MSG_extensionDescription__",
 
     "icons" : {
         "16": "icons/16.png",
@@ -27,5 +28,7 @@
         "creeptd-stats.js",
         "dygraph.js",
         "style.css"
-    ]
+    ],
+
+    "default_locale": "en"
 }
