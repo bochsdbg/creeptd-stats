@@ -95,6 +95,9 @@ Legend.prototype.select = function(e) {
   var xValue = e.selectedX;
   var points = e.selectedPoints;
   var row = e.selectedRow;
+  let highlight_series_name = e.dygraph.getHighlightSeries();
+  let highlight_series_props = e.dygraph.getPropertiesForSeries(highlight_series_name);
+  let current_series_idx = highlight_series_props && highlight_series_props.column ? highlight_series_props.column - 1: 0;
 
   var legendMode = e.dygraph.getOption('legend');
   if (legendMode === 'never') {
@@ -111,17 +114,19 @@ Legend.prototype.select = function(e) {
     // within the plotter_ area
     // offset 50 px to the right and down from the first selection point
     // 50 px is guess based on mouse cursor size
-    if (!points[0]) {
+    if (!points[current_series_idx]) {
       return;
     }
 
-    var leftLegend = points[0].x * area.w + 50;
-    var topLegend  = points[0].y * area.h - 50;
+    let offsets = {x: 0, y: 0};
+
+    var leftLegend = points[current_series_idx].x * area.w + offsets.x;
+    var topLegend  = points[current_series_idx].y * area.h - offsets.y;
 
     // if legend floats to end of the chart area, it flips to the other
     // side of the selection point
     if ((leftLegend + labelsDivWidth + 1) > area.w) {
-      leftLegend = leftLegend - 2 * 50 - labelsDivWidth - (yAxisLabelWidth - area.x);
+      leftLegend = leftLegend - 2 * offsets.x - labelsDivWidth - (yAxisLabelWidth - area.x);
     }
 
     e.dygraph.graphDiv.appendChild(this.legend_div_);

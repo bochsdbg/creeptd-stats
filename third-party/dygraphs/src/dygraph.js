@@ -1552,6 +1552,7 @@ Dygraph.prototype.findClosestPoint = function(domX, domY) {
   return {
     row: closest_row,
     seriesName: name,
+    seriesIdx: closest_series,
     point: closest_point
   };
 };
@@ -1610,6 +1611,7 @@ Dygraph.prototype.findStackedPoint = function(domX, domY) {
   return {
     row: row,
     seriesName: name,
+    seriesIdx: closestSeries,
     point: closestPoint
   };
 };
@@ -1722,7 +1724,8 @@ Dygraph.prototype.updateSelection_ = function(opt_animFraction) {
   this.cascadeEvents_('select', {
     selectedRow: this.lastRow_ === -1 ? undefined : this.lastRow_,
     selectedX: this.lastx_ === -1 ? undefined : this.lastx_,
-    selectedPoints: this.selPoints_
+    selectedPoints: this.selPoints_,
+    selectedSeries: this.las
   });
   // TODO(danvk): use defaultPrevented here?
 

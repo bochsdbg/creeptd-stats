@@ -272,7 +272,7 @@ export function createChart(charts, chart_name, elem, user_opts) {
         ],
 
         highlightSeriesOpts: { strokeWidth: 2 },
-        highlightSeriesBackgroundColor: '#000',
+        highlightSeriesBackgroundColor: 'rgba(0, 0, 0, 0.2)',
         highlightCircleSize: 0,
 
         // drawHighlightPointCallback: function(g, name, ctx, canvasx, canvasy, color, radius) {
