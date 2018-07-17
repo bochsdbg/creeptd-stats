@@ -11,7 +11,7 @@ rule svgrender
     command = inkscape -z -e $out $in -w $$(basename -s .png $out) -h $$(basename -s .png $out) >/dev/null && optipng -o7 $out -silent
 
 rule zip
-    command = bsdtar cvf $out --strip-components 1 -a $in 2>/dev/null
+    command = rm -f $out && bsdtar cvf $out --strip-components 1 -a $in 2>/dev/null
 
 build dist/manifest.json: copy src/manifest.json
 
