@@ -114,7 +114,7 @@ Legend.prototype.select = function(e) {
     if (!points[0]) {
       return;
     }
-    
+
     var leftLegend = points[0].x * area.w + 50;
     var topLegend  = points[0].y * area.h - 50;
 
@@ -185,6 +185,7 @@ Legend.prototype.destroy = function() {
  * Generates HTML for the legend which is displayed when hovering over the
  * chart. If no selected points are specified, a default legend is returned
  * (this may just be the empty string).
+ * @param {Dygraph} g Graph instance.
  * @param {number} x The x-value of the selected points.
  * @param {Object} sel_points List of selected points for the given
  *   x-value. Should have properties like 'name', 'yval' and 'canvasy'.
