@@ -215,9 +215,39 @@ export function createChart(charts, chart_name, elem, user_opts) {
         animatedZooms: true,
 
         legend: 'follow',
-
         // labelsDiv: labelsDiv,
-        labelsSeparateLines: true,
+        labelsSeparateLines: false,
+
+        legendFormatter: function(data) {
+            if (data.x == null) {
+                // This happens when there's no selection and {legend: 'always'} is set.
+                return '';
+                // return '<br>'
+                //        + data.series
+                //              .map(function(series) {
+                //                  return series.dashHTML + ' ' + series.labelHTML
+                //              })
+                //              .join('<br>');
+            }
+
+            let html = data.xHTML + ': ';
+            data.series.forEach((series) => {
+                if (!series.isVisible) return;
+                let style = 'color: ' + series.color;
+                if (series.isHighlighted) {
+                    style += '; font-weight: bold';
+                }
+                html += '<span style="' + style + '">' + series.yHTML + '</span> ';
+            });
+            // let html = this.getLabels()[0] + ': ' + data.xHTML;
+            // data.series.forEach(function(series) {
+            //     if (!series.isVisible) return;
+            //     let labeledData = series.labelHTML + ': ' + series.yHTML;
+            //     if (series.isHighlighted) { labeledData = '<b>' + labeledData + '</b>'; }
+            //     html += '<br>' + series.dashHTML + ' ' + labeledData;
+            // });
+            return html;
+        },
 
         panEdgeFraction: 0.0001,
         xRangePad: 0,
@@ -260,32 +290,11 @@ export function createChart(charts, chart_name, elem, user_opts) {
         //     prev_x = x;
         // },
 
-        legendFormatter: function(data) {
-            if (data.x == null) {
-                // This happens when there's no selection and {legend: 'always'} is set.
-                return '<br>'
-                       + data.series
-                             .map(function(series) {
-                                 return series.dashHTML + ' ' + series.labelHTML
-                             })
-                             .join('<br>');
-            }
-
-            let html = this.getLabels()[0] + ': ' + data.xHTML;
-            data.series.forEach(function(series) {
-                if (!series.isVisible) return;
-                let labeledData = series.labelHTML + ': ' + series.yHTML;
-                if (series.isHighlighted) { labeledData = '<b>' + labeledData + '</b>'; }
-                html += '<br>' + series.dashHTML + ' ' + labeledData;
-            });
-            return html;
-        },
-
         // xlabel: "round",
         axes: {
             x: {
                 valueFormatter: function(x) {
-                    return 'Round ' + x;
+                    return 'R' + x;
                 }
             },
         },
