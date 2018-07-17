@@ -111,6 +111,10 @@ Legend.prototype.select = function(e) {
     // within the plotter_ area
     // offset 50 px to the right and down from the first selection point
     // 50 px is guess based on mouse cursor size
+    if (!points[0]) {
+      return;
+    }
+    
     var leftLegend = points[0].x * area.w + 50;
     var topLegend  = points[0].y * area.h - 50;
 
