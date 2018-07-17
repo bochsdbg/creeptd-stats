@@ -21,6 +21,80 @@ export var LN_TEN = Math.log(LOG_SCALE);
 
 /**
  * @private
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
+ * @param {number} x3
+ * @param {number} y3
+ * @return {number}
+ */
+export function triangleArea(x1, y1, x2, y2, x3, y3) {
+  let dx13 = x1 - x3,
+      dy13 = y1 - y3,
+      dx23 = x2 - x3,
+      dy23 = y2 - y3;
+  return Math.abs(dx13 * dy23 - dy13 * dx23) / 2;
+}
+
+/**
+ * @private
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
+ * @return {number}
+ */
+export function dotProduct(x1, y1, x2, y2) {
+  return x1 * x2 + y1 * y2;
+}
+
+/**
+ * @private
+ * @param {number} px
+ * @param {number} py
+ * @param {number} x0
+ * @param {number} y0
+ * @param {number} x1
+ * @param {number} y1
+ * @return {number[]}
+ */
+export function nearestPointOfSegment(px, py, x0, y0, x1, y1) {
+  let vx = x1 - x0, 
+      vy = y1 - y0,
+      wx = px - x0,
+      wy = py - y0;
+  let c1 = dotProduct(wx, wy, vx, vy);
+  if (c1 <= 0) {
+    return [x0, y0];
+  }
+  let c2 = dotProduct(vx, vy, vx, vy);
+  if (c2 <= c1) {
+    return [x1, y1];
+  }
+
+  let b = c1 / c2;
+  let rx = x0 + b * vx,
+      ry = y0 + b * vy;
+
+  return [rx, ry];
+}
+
+/**
+ * @private
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
+ * @return {number}
+ */
+export function getSqrDist(x1, y1, x2, y2) {
+  let dx = x1 - x2, dy = y1 - y2;
+  return dx * dx + dy * dy;
+}
+
+/**
+ * @private
  * @param {number} x
  * @return {number}
  */

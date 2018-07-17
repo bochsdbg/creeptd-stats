@@ -1454,7 +1454,7 @@ Dygraph.prototype.eventToDomCoords = function(event) {
   // if (event.offsetX && event.offsetY) {
   //   return [ event.offsetX, event.offsetY ];
   // } else {
-    var eventElementPos = utils.findPos(this.mouseEventElement_);
+    var eventElementPos = utils.findPos(this.canvas_);
     var canvasx = utils.pageX(event) - eventElementPos.x;
     var canvasy = utils.pageY(event) - eventElementPos.y;
     return [canvasx, canvasy];
@@ -1501,29 +1501,58 @@ Dygraph.prototype.findClosestRow = function(domX) {
  * @private
  */
 Dygraph.prototype.findClosestPoint = function(domX, domY) {
-  var minDist = Infinity;
-  var dist, dx, dy, point, closestPoint, closestSeries, closestRow;
-  for ( var setIdx = this.layout_.points.length - 1 ; setIdx >= 0 ; --setIdx ) {
-    var points = this.layout_.points[setIdx];
-    for (var i = 0; i < points.length; ++i) {
-      point = points[i];
-      if (!utils.isValidPoint(point)) continue;
-      dx = point.canvasx - domX;
-      dy = point.canvasy - domY;
-      dist = dx * dx + dy * dy;
-      if (dist < minDist) {
-        minDist = dist;
-        closestPoint = point;
-        closestSeries = setIdx;
-        closestRow = point.idx;
+  let min_dist = Infinity;
+  let closest_point, closest_series, closest_row;
+
+  for (let i = this.layout_.points.length - 1 ; i >= 0 ; --i) {
+    let points = this.layout_.points[i];
+
+    for (let j = 1; j < points.length; ++j) {
+      let p0 = points[j - 1];
+      let p1 = points[j];
+      if (!utils.isValidPoint(p0) || !utils.isValidPoint(p1)) continue;
+
+      let nearest_point = utils.nearestPointOfSegment(domX, domY, p0.canvasx, p0.canvasy, p1.canvasx, p1.canvasy);
+      let dist = utils.getSqrDist(domX, domY, nearest_point[0], nearest_point[1]);
+      if (dist < min_dist) {
+        min_dist = dist;
+        closest_series = i;
+
+        let dist0 = utils.getSqrDist(domX, domY, p0.canvasx, p0.canvasy);
+        let dist1 = utils.getSqrDist(domX, domY, p1.canvasx, p1.canvasy);
+
+        if (dist0 < dist1) {
+          closest_point = p0;
+          closest_row = p0.idx;
+        } else {
+          closest_point = p1;
+          closest_row = p1.idx;
+        }
       }
     }
   }
-  var name = this.layout_.setNames[closestSeries];
+  // var dist, dx, dy, point, closestPoint, closestSeries, closestRow;
+  // for ( var setIdx = this.layout_.points.length - 1 ; setIdx >= 0 ; --setIdx ) {
+  //   var points = this.layout_.points[setIdx];
+  //   for (var i = 0; i < points.length; ++i) {
+  //     point = points[i];
+  //     if (!utils.isValidPoint(point)) continue;
+  //     dx = point.canvasx - domX;
+  //     dy = point.canvasy - domY;
+  //     dist = dx * dx + dy * dy;
+  //     if (dist < minDist) {
+  //       minDist = dist;
+  //       closestPoint = point;
+  //       closestSeries = setIdx;
+  //       closestRow = point.idx;
+  //     }
+  //   }
+  // }
+  let name = this.layout_.setNames[closest_series];
   return {
-    row: closestRow,
+    row: closest_row,
     seriesName: name,
-    point: closestPoint
+    point: closest_point
   };
 };
 
