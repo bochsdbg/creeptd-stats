@@ -24,7 +24,7 @@ build dist/icons/96.png: svgrender src/icon.svg
 build dist/icons/128.png: svgrender src/icon.svg
 build dist/icons/256.png: svgrender src/icon.svg
 
-build dist/creeptd-stats.js: jsmin src/creeptd-stats.js
+build dist/creeptd-stats.js: jsmin src/creeptd-stats.js | src/utils.js src/i18n.js
 build dist/inject.js: jsmin src/inject.js
 
 build dist/style.css: cssmin src/style.css
