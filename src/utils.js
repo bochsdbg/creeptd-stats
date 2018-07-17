@@ -1,11 +1,12 @@
 import Dygraph from '../third-party/dygraphs/src/dygraph';
+import Crosshair from '../third-party/dygraphs/src/extras/crosshair';
 import * as i18n from './i18n';
 
 export function darkenColor(colorStr) {
     let color = Dygraph.toRGB_(colorStr);
-    color.r = Math.round(color.r / 2);
-    color.g = Math.round(color.g / 2);
-    color.b = Math.round(color.b / 2);
+    color.r   = Math.round(color.r / 2);
+    color.g   = Math.round(color.g / 2);
+    color.b   = Math.round(color.b / 2);
     return 'rgb(' + color.r + ',' + color.g + ',' + color.b + ')';
 }
 
@@ -67,9 +68,9 @@ export function multiColumnBarPlotter(e) {
     // We need to handle all the series simultaneously.
     if (e.seriesIndex !== 0) return;
 
-    var g        = e.dygraph;
-    var ctx      = e.drawingContext;
-    var sets     = e.allSeriesPoints;
+    var g    = e.dygraph;
+    var ctx  = e.drawingContext;
+    var sets = e.allSeriesPoints;
     if (sets.length === 0) return;
     var y_bottom = e.dygraph.toDomYCoord(0);
 
@@ -91,9 +92,7 @@ export function multiColumnBarPlotter(e) {
 
     var max_yvals = new Array(sets[0].length).fill(0);
     for (var i = 0; i < sets.length; ++i) {
-        for (var j = 0; j < sets[i].length; ++j) { 
-            max_yvals[j] = Math.max(max_yvals[j], sets[i][j].yval); 
-        }
+        for (var j = 0; j < sets[i].length; ++j) { max_yvals[j] = Math.max(max_yvals[j], sets[i][j].yval); }
     }
 
     for (var j = 0; j < sets.length; j++) {
@@ -139,43 +138,44 @@ export function loadCharts(charts) {
             has_values = true;
         }
         if (has_values) {
-            values[chart_name] = [];
+            values[chart_name]    = [];
             src_datas[chart_name] = src_data;
-            has_data = true;
+            has_data              = true;
         }
     }
 
-    if (rounds_count === 0 || players_count === 0 || !has_data) {
-        return null;
-    }
+    if (rounds_count === 0 || players_count === 0 || !has_data) { return null; }
 
     for (let chart_name in charts) {
         if (!(values[chart_name] instanceof Array)) continue;
 
-        let data = values[chart_name];
+        let data     = values[chart_name];
         let elements = src_datas[chart_name].elements;
 
         for (let player = 0; player < players_count; ++player) {
             if (!elements[player]) continue;
 
-            if (elements[player].text) {
-                player_names[player] = elements[player].text.replace(/^\d+\.\s*/, '');
-            }
-            if (elements[player].colour) {
-                colors[player] = elements[player].colour;
-            }
+            if (elements[player].text) { player_names[player] = elements[player].text.replace(/^\d+\.\s*/, ''); }
+            if (elements[player].colour) { colors[player] = elements[player].colour; }
         }
 
         for (let round = 0; round < rounds_count; ++round) {
             data[round] = [round];
             for (let player = 0; player < players_count; ++player) {
-                let val = elements[player].values[round];
-                data[round][player + 1] = !val || !val.hasOwnProperty('value') ?  val : val.value;
+                let val                 = elements[player].values[round];
+                data[round][player + 1] = !val || !val.hasOwnProperty('value') ? val : val.value;
             }
         }
     }
 
-    return {rounds_count: rounds_count, players_count: players_count, values: values, player_names: player_names, colors: colors, heights: Array(players_count).fill(null)};
+    return {
+        rounds_count: rounds_count,
+        players_count: players_count,
+        values: values,
+        player_names: player_names,
+        colors: colors,
+        heights: Array(players_count).fill(null)
+    };
 }
 
 function scrollV3(event, g, context) {
@@ -214,7 +214,7 @@ export function createChart(charts, chart_name, elem, user_opts) {
         // logscale: true,
         animatedZooms: true,
 
-        // legend: 'follow',
+        legend: 'follow',
 
         // labelsDiv: labelsDiv,
         labelsSeparateLines: true,
@@ -237,20 +237,48 @@ export function createChart(charts, chart_name, elem, user_opts) {
         pixelsPerLabel: 30,
         independentTicks: true,
         colors: charts.colors,
+        plugins: [
+            new Crosshair({direction: "vertical"})
+        ],
 
-        drawHighlightPointCallback: function(g, name, ctx, canvasx, canvasy, color, radius) {
-            // var extremes = g.yAxisExtremes();
-            var x = Math.floor(canvasx + 0.5);
-            if (prev_x === x) return;
+        highlightSeriesOpts: { strokeWidth: 2 },
+        highlightSeriesBackgroundColor: '#000',
+        highlightCircleSize: 0,
 
-            ctx.beginPath();
-            ctx.strokeStyle = '#AAAAAA';
-            ctx.lineWidth   = 0.5;
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, g.getOption('height'));
-            ctx.stroke();
+        // drawHighlightPointCallback: function(g, name, ctx, canvasx, canvasy, color, radius) {
+        //     // var extremes = g.yAxisExtremes();
+        //     var x = Math.floor(canvasx + 0.5);
+        //     if (prev_x === x) return;
 
-            prev_x = x;
+        //     ctx.beginPath();
+        //     ctx.strokeStyle = '#AAAAAA';
+        //     ctx.lineWidth   = 0.5;
+        //     ctx.moveTo(x, 0);
+        //     ctx.lineTo(x, g.getOption('height'));
+        //     ctx.stroke();
+
+        //     prev_x = x;
+        // },
+
+        legendFormatter: function(data) {
+            if (data.x == null) {
+                // This happens when there's no selection and {legend: 'always'} is set.
+                return '<br>'
+                       + data.series
+                             .map(function(series) {
+                                 return series.dashHTML + ' ' + series.labelHTML
+                             })
+                             .join('<br>');
+            }
+
+            let html = this.getLabels()[0] + ': ' + data.xHTML;
+            data.series.forEach(function(series) {
+                if (!series.isVisible) return;
+                let labeledData = series.labelHTML + ': ' + series.yHTML;
+                if (series.isHighlighted) { labeledData = '<b>' + labeledData + '</b>'; }
+                html += '<br>' + series.dashHTML + ' ' + labeledData;
+            });
+            return html;
         },
 
         // xlabel: "round",
@@ -259,12 +287,12 @@ export function createChart(charts, chart_name, elem, user_opts) {
                 valueFormatter: function(x) {
                     return 'Round ' + x;
                 }
-            }
+            },
         },
 
         interactionModel: {
             mousewheel: scrollV3,
-            
+
             mousedown: function(event, g, context) {
                 context.initializeMouseDown(event, g, context);
                 Dygraph.startPan(event, g, context);
@@ -290,7 +318,7 @@ export function createChart(charts, chart_name, elem, user_opts) {
                 var logscale = g.getOption('logscale');
                 logscale     = !logscale;
                 g.updateOptions({logscale: logscale});
-            
+
                 event.preventDefault();
                 event.stopPropagation();
             },
@@ -298,9 +326,7 @@ export function createChart(charts, chart_name, elem, user_opts) {
     };
 
     for (let k in user_opts) {
-        if (user_opts.hasOwnProperty(k)) {
-            opts[k] = user_opts[k];
-        }
+        if (user_opts.hasOwnProperty(k)) { opts[k] = user_opts[k]; }
     }
 
     return new Dygraph(elem, charts.values[chart_name], opts);

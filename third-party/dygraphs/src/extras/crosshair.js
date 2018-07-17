@@ -6,82 +6,75 @@
 
 /*global Dygraph:false */
 /*jshint globalstrict: true */
-Dygraph.Plugins.Crosshair = (function() {
-  "use strict";
 
-  /**
-   * Creates the crosshair
-   *
-   * @constructor
-   */
+import Dygraph from '../dygraph';
 
-  var crosshair = function(opt_options) {
+'use strict';
+
+let crosshair = function(opt_options) {
     this.canvas_ = document.createElement("canvas");
     opt_options = opt_options || {};
     this.direction_ = opt_options.direction || null;
-  };
+};
 
-  crosshair.prototype.toString = function() {
+crosshair.prototype.toString = function() {
     return "Crosshair Plugin";
+};
+
+crosshair.prototype.activate = function(g) {
+  g.graphDiv.appendChild(this.canvas_);
+
+  return {
+    select: this.select,
+    deselect: this.deselect
   };
+};
 
-  /**
-   * @param {Dygraph} g Graph instance.
-   * @return {object.<string, function(ev)>} Mapping of event names to callbacks.
-   */
-  crosshair.prototype.activate = function(g) {
-    g.graphDiv.appendChild(this.canvas_);
+crosshair.prototype.select = function(e) {
+  if (this.direction_ === null) {
+    return;
+  }
 
-    return {
-      select: this.select,
-      deselect: this.deselect
-    };
-  };
+  var width = e.dygraph.width_;
+  var height = e.dygraph.height_;
+  this.canvas_.width = width;
+  this.canvas_.height = height;
+  this.canvas_.style.width = width + "px";    // for IE
+  this.canvas_.style.height = height + "px";  // for IE
 
-  crosshair.prototype.select = function(e) {
-    if (this.direction_ === null) {
-      return;
+  var ctx = this.canvas_.getContext("2d");
+  ctx.clearRect(0, 0, width, height);
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+  ctx.beginPath();
+
+  if (!e.dygraph.selPoints_[0]) return;
+
+  var canvasx = Math.floor(e.dygraph.selPoints_[0].canvasx) + 0.5; // crisper rendering
+
+  if (this.direction_ === "vertical" || this.direction_ === "both") {
+    ctx.moveTo(canvasx, 0);
+    ctx.lineTo(canvasx, height);
+  }
+
+  if (this.direction_ === "horizontal" || this.direction_ === "both") {
+    for (var i = 0; i < e.dygraph.selPoints_.length; i++) {
+      var canvasy = Math.floor(e.dygraph.selPoints_[i].canvasy) + 0.5; // crisper rendering
+      ctx.moveTo(0, canvasy);
+      ctx.lineTo(width, canvasy);
     }
+  }
 
-    var width = e.dygraph.width_;
-    var height = e.dygraph.height_;
-    this.canvas_.width = width;
-    this.canvas_.height = height;
-    this.canvas_.style.width = width + "px";    // for IE
-    this.canvas_.style.height = height + "px";  // for IE
+  ctx.stroke();
+  ctx.closePath();
+};
 
-    var ctx = this.canvas_.getContext("2d");
-    ctx.clearRect(0, 0, width, height);
-    ctx.strokeStyle = "rgba(0, 0, 0,0.3)";
-    ctx.beginPath();
+crosshair.prototype.deselect = function(e) {
+  var ctx = this.canvas_.getContext("2d");
+  ctx.clearRect(0, 0, this.canvas_.width, this.canvas_.height);
+};
 
-    var canvasx = Math.floor(e.dygraph.selPoints_[0].canvasx) + 0.5; // crisper rendering
+crosshair.prototype.destroy = function() {
+  this.canvas_ = null;
+};
 
-    if (this.direction_ === "vertical" || this.direction_ === "both") {
-      ctx.moveTo(canvasx, 0);
-      ctx.lineTo(canvasx, height);
-    }
-
-    if (this.direction_ === "horizontal" || this.direction_ === "both") {
-      for (var i = 0; i < e.dygraph.selPoints_.length; i++) {
-        var canvasy = Math.floor(e.dygraph.selPoints_[i].canvasy) + 0.5; // crisper rendering
-        ctx.moveTo(0, canvasy);
-        ctx.lineTo(width, canvasy);
-      }
-    }
-
-    ctx.stroke();
-    ctx.closePath();
-  };
-
-  crosshair.prototype.deselect = function(e) {
-    var ctx = this.canvas_.getContext("2d");
-    ctx.clearRect(0, 0, this.canvas_.width, this.canvas_.height);
-  };
-
-  crosshair.prototype.destroy = function() {
-    this.canvas_ = null;
-  };
-
-  return crosshair;
-})();
+export default crosshair;
