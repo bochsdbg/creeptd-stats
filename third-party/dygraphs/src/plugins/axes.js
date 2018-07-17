@@ -107,7 +107,8 @@ axes.prototype.willDrawChart = function(e) {
   function halfDown(y){ return Math.round(y) - 0.5; }
 
   var context = e.drawingContext;
-  var containerDiv = e.canvas.parentNode;
+  // var containerDiv = e.canvas.parentNode;
+  var containerDiv = document.createDocumentFragment();
   var canvasWidth = g.width_;  // e.canvas.width is affected by pixel ratio.
   var canvasHeight = g.height_;
 
@@ -135,15 +136,18 @@ axes.prototype.willDrawChart = function(e) {
      * y: y2
      */
     var div = document.createElement('div');
-    var labelStyle = labelStyles[prec_axis == 'y2' ? 'y2' : axis];
-    utils.update(div.style, labelStyle);
+    // var labelStyle = labelStyles[prec_axis === 'y2' ? 'y2' : axis];
+    // utils.update(div.style, labelStyle);
     // TODO: combine outer & inner divs
-    var inner_div = document.createElement('div');
-    inner_div.className = 'dygraph-axis-label' +
-                          ' dygraph-axis-label-' + axis +
-                          (prec_axis ? ' dygraph-axis-label-' + prec_axis : '');
-    inner_div.innerHTML = txt;
-    div.appendChild(inner_div);
+
+    // var inner_div = document.createElement('div');
+    div.className = 'dygraph-axis-label' +
+                    ' dygraph-axis-label-' + axis;
+    //                       (prec_axis ? ' dygraph-axis-label-' + prec_axis : '');
+    // inner_div.innerHTML = txt;
+    // div.appendChild(inner_div);
+
+    div.innerHTML = txt;
     return div;
   };
 
@@ -276,8 +280,8 @@ axes.prototype.willDrawChart = function(e) {
 
         var left = (x - getAxisOption('axisLabelWidth')/2);
         if (left + getAxisOption('axisLabelWidth') > canvasWidth) {
-          left = canvasWidth - getAxisOption('axisLabelWidth');
-          label.style.textAlign = 'right';
+          // left = canvasWidth - getAxisOption('axisLabelWidth');
+          // label.style.textAlign = 'right';
         }
         if (left < 0) {
           left = 0;
@@ -289,6 +293,7 @@ axes.prototype.willDrawChart = function(e) {
         containerDiv.appendChild(label);
         this.xlabels_.push(label);
       });
+      e.canvas.parentNode.appendChild(containerDiv);
     }
 
     context.strokeStyle = g.getOptionForAxis('axisLineColor', 'x');
