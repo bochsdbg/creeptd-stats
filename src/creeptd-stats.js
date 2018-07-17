@@ -25,6 +25,7 @@ if (charts && stats_div) {
         '<p class="stat-info">Mouse whell on charts for zoomming, click and drag for panning, double click for toggling logarithmic scale</p>';
     let gs = chart_order.map(function(chart_name) {
         let div = document.createElement('div');
+        div.className = 'chart-wrapper';
         stats_div.appendChild(div);
         return utils.createChart(charts, chart_name, div);
     });
