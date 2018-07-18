@@ -146,7 +146,7 @@ Legend.prototype.deselect = function(e) {
   }
 
   // Have to do this every time, since styles might have changed.
-  var oneEmWidth = calculateEmWidthInDiv(this.legend_div_);
+  var oneEmWidth = 0; // calculateEmWidthInDiv(this.legend_div_);
   this.one_em_width_ = oneEmWidth;
 
   var html = Legend.generateLegendHTML(e.dygraph, undefined, undefined, oneEmWidth, null);

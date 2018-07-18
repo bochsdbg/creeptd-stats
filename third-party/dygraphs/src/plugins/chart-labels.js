@@ -84,7 +84,7 @@ var createRotatedDiv = function(g, box, axis, classes, html) {
 
   var class_div = document.createElement("div");
   class_div.className = classes;
-  class_div.innerHTML = html;
+  class_div.textContent = html;
 
   inner_div.appendChild(class_div);
   div.appendChild(inner_div);

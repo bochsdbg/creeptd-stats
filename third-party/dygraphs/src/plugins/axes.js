@@ -147,7 +147,7 @@ axes.prototype.willDrawChart = function(e) {
     // inner_div.innerHTML = txt;
     // div.appendChild(inner_div);
 
-    div.innerHTML = txt;
+    div.textContent = txt;
     return div;
   };
 
