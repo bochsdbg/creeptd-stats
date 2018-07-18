@@ -187,9 +187,11 @@ export var numericTicks = function(a, b, pixels, opts, dygraph, vals) {
       // Allow reverse y-axis if it's explicitly requested.
       if (low_val > high_val) scale *= -1;
       
-      let min_step = opts('minStep') || null;
+      let min_step = opts('minStep') || 0;
       let step = Math.max(min_step, scale);
-      for (let val = low_val; val <= high_val; val += step) {
+      let low_val_aligned = Math.ceil(low_val / step) * step;
+
+      for (let val = low_val_aligned; val <= high_val; val += step) {
         ticks.push( {v: val} );
       }
 
