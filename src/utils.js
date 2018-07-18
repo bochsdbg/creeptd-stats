@@ -260,6 +260,14 @@ export function createChart(charts, chart_name, elem, user_opts) {
 
         drawGrid: true,
         gridLineWidth: 0.1,
+        digitsAfterDecimal: 0,
+        minStep: 1,
+
+        // ticker: function(min, max, pixels, opts, dygraph, vals) {
+        //     return [
+        //         {}
+        //     ];
+        // },
         // gridLinePattern: [1, 5],
 
         axisLineColor: '#fff',

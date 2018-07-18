@@ -186,10 +186,22 @@ export var numericTicks = function(a, b, pixels, opts, dygraph, vals) {
       // Construct the set of ticks.
       // Allow reverse y-axis if it's explicitly requested.
       if (low_val > high_val) scale *= -1;
-      for (i = 0; i <= nTicks; i++) {
-        tickV = low_val + i * scale;
-        ticks.push( {v: tickV} );
+      
+      let min_step = opts('minStep') || null;
+      let step = Math.max(min_step, scale);
+      for (let val = low_val; val <= high_val; val += step) {
+        ticks.push( {v: val} );
       }
+
+      // if (!min_step) {
+      //   for (i = 0; i <= nTicks; i++) {
+      //     tickV = low_val + i * scale;
+      //     ticks.push( {v: tickV} );
+      //   }
+      // } else {
+        
+      // }
+      
     }
   }
 
