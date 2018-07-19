@@ -6,7 +6,8 @@ const messages = {
         "chart_title_income": { "message": "Income" },
         "chart_title_spent_creeps": { "message": "Spent for creeps" },
         "chart_title_spent_towers": { "message": "Spent for towers" },
-        "chart_title_sellings": { "message": "Sellings" }
+        "chart_title_sellings": { "message": "Sellings" },
+        "chart_title_money": { "message": "Money" },
     },
 }
 

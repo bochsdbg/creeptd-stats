@@ -197,10 +197,11 @@ function scrollV3(event, g, context) {
 }
 
 export function createChart(charts, chart_name, elem, user_opts) {
+    if (!charts.values[chart_name]) return null;
+
     user_opts = user_opts || {};
 
     let labels = ['Round'].concat(charts.player_names);
-    let prev_x = -1;
 
     let opts = {
         valueFormatter: function(x) {
@@ -347,4 +348,56 @@ export function createChart(charts, chart_name, elem, user_opts) {
     }
 
     return new Dygraph(elem, charts.values[chart_name], opts);
+}
+
+export function countPerRoundValues(vals) {
+    if (!vals || !vals[0]) return null;
+    let result = [vals[0]];
+    for (let round_num = 1; round_num < vals.length; ++round_num) {
+        result[round_num] = [vals[round_num][0]];
+        for (let i = 1; i < vals[round_num].length; ++i) {
+            result[round_num][i] = vals[round_num][i] - vals[round_num - 1][i];
+        }
+    }
+    return result;
+}
+
+export function countMoney(starting_money, charts) {
+    let accumulated_vals = charts.values;
+    let per_round_values = charts.per_round_values;
+
+    let income = accumulated_vals.income;
+    if (!income) return null;
+    let rounds_count = income.length;
+    let row_size = income[0].length;
+
+    let prev_row = Array(row_size).fill(starting_money);
+    let result = Array(rounds_count);
+
+    for (let round_num = 0; round_num < rounds_count; ++round_num) {
+        let row = Array(row_size);
+        row[0] = round_num;
+        
+        for (let i = 1; i < row_size; ++i) {
+            let money_got = income[round_num][i] + Math.abs(per_round_values.sellings[round_num][i]);
+            let spent_creeps = per_round_values.spent_creeps ? per_round_values.spent_creeps[round_num][i] : 0;
+            let spent_towers = per_round_values.spent_towers ? per_round_values.spent_towers[round_num][i] : 0;
+            let money_for_killing = 0;
+            for (let k = 1; k < row_size; ++k) {
+                if (i !== k && per_round_values.spent_creeps && per_round_values.spent_creeps[round_num][k]) {
+                    money_for_killing += per_round_values.income[round_num][k] || 0;
+                }
+            }
+            money_got += money_for_killing;
+            let investment = per_round_values.spent_creeps ? 0 : (per_round_values.income[round_num+1] ? per_round_values.income[round_num+1][i] * 10 : 0);
+            let money_spent = spent_towers + spent_creeps + investment;
+            let new_val = prev_row[i] + money_got - money_spent;
+            row[i] = Math.max(new_val, 0);
+            // row[i] = new_val;
+        }
+
+        result[round_num] = row;
+        prev_row = row;
+    }
+    return result;
 }
