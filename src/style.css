@@ -108,11 +108,13 @@
     /* replaces old axisLabelColor option */
 }
 
+/* 
 .dygraph-axis-label-x {}
 
 .dygraph-axis-label-y {}
 
 .dygraph-axis-label-y2 {}
+ */
 
 .dygraph-title {
     font-weight: bold;
