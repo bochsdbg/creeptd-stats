@@ -71,8 +71,15 @@ if (charts && stats_div) {
     // charts.values.spent_towers = per_round_values.spent_towers;
     // charts.values.sellings = per_round_values.sellings;
 
-    stats_div.innerHTML =
-        '<p class="stat-info">Mouse wheel on charts for zooming, click and drag for panning, double click for toggling logarithmic scale</p>';
+    stats_div.textContent = '';
+    let global_options = document.createElement('div');
+    global_options.className = 'global-options';
+    stats_div.appendChild(global_options);
+    let stat_info_elem = document.createElement('p');
+    stat_info_elem.className = 'stat-info';
+    stat_info_elem.innerHTML = 'Mouse wheel on charts for zooming, click and drag for panning, double click for toggling logarithmic scale';
+    stats_div.appendChild(stat_info_elem);
+
     let gs = chart_order.map(function(chart_name) {
         let div = document.createElement('div');
         div.className = 'chart-wrapper';
@@ -80,6 +87,14 @@ if (charts && stats_div) {
         return utils.createChart(charts, chart_name, div);
     });
     gs = gs.filter((x) => x != null);
+
+    global_options.appendChild(utils.createOptionElem(charts.options.global.highlight_series, 'highlight_series', function(value){
+        charts.options.global.highlight_series = value;
+        for (let i = 0; i < gs.length; ++i) {
+            gs[i].updateOptions({ highlightSeriesOpts: value ? utils.highlightSeriesOpts : null }, true);
+        }
+    }));
+
     synchronize(gs, {selection: true, zoom: true, range: false});
 
     let summary_charts = utils.loadCharts({summary: 'chart1'});

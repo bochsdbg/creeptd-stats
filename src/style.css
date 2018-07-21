@@ -178,17 +178,19 @@
 }
 
 .button-checkable {
-    display: block;
+    display: inline-block;
+    padding: 4px;
 }
 
-.chart-options .button-checkable>span {
+.chart-options .button-checkable {
     width: 32px;
     height: 32px;
-    font-size: 16px;
+    display: block;
 }
 .chart-wrapper {
     position: relative;
     margin-right: 35px;
+    clear: both;
 }
 
 .chart-wrapper .chart-options {
@@ -197,10 +199,23 @@
     top: 0;
 }
 
+.global-options {
+    margin-bottom: 10px;
+    float: right;
+}
+
+.global-options .button-checkable {
+    height: 32px;
+}
+
 .button-checkable>span {
+    padding: 0 10px;
+    margin: 4px;
     border: 1px solid #555;
     color: #555;
+    height: 100%;
     display: inline-block;
+    font-size: 16px;
     text-align: center;
     line-height: 100%;
     vertical-align: middle;

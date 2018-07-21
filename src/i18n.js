@@ -12,6 +12,8 @@ const messages = {
         "option_text_accumulative": { "message": "A" },
         "option_title_logscale": { "message": "Logarithmic scale" },
         "option_text_logscale": { "message": "L" },
+        "option_title_highlight_series": { "message": "" },
+        "option_text_highlight_series": { "message": "Highlight current series" },
     },
 }
 

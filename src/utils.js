@@ -2,6 +2,8 @@ import Dygraph from "../third-party/dygraphs/src/dygraph";
 import Crosshair from "../third-party/dygraphs/src/extras/crosshair";
 import * as i18n from "./i18n";
 
+export let highlightSeriesOpts = { strokeWidth: 2 };
+
 export function darkenColor(colorStr) {
     let color = Dygraph.toRGB_(colorStr);
     color.r = Math.round(color.r / 2);
@@ -325,7 +327,7 @@ export function createChart(charts, chart_name, elem, user_opts) {
         colors: charts.colors,
         plugins: [new Crosshair({ direction: "vertical" })],
 
-        highlightSeriesOpts: chart_options.highlight_series ? { strokeWidth: 2 } : null,
+        highlightSeriesOpts: chart_options.highlight_series ? highlightSeriesOpts : null,
         highlightSeriesBackgroundColor: "rgba(0, 0, 0, 0.2)",
         highlightCircleSize: 0,
 
