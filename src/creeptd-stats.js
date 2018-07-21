@@ -21,7 +21,7 @@ let default_options = {
         // accumulative: false,
     },
     income: {
-        accumulative: false,
+        accumulative: true,
         logscale: false,
     },
     spent_creeps: {
