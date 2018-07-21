@@ -196,6 +196,26 @@ function scrollV3(event, g, context) {
     event.stopPropagation();
 }
 
+export function createOptionElem(initial_value, option_name, callback) {
+    let opt_elem         = document.createElement('label');
+    opt_elem.className   = 'button-checkable';
+    let input_elem       = document.createElement('input');
+    input_elem.type      = 'checkbox';
+    input_elem.checked   = initial_value;
+    let inner_span       = document.createElement('span');
+    inner_span.innerHTML = i18n.tr('option_text_' + option_name);
+    opt_elem.title       = i18n.tr('option_title_' + option_name);
+    opt_elem.onclick = function(e) {
+        e.stopPropagation();
+        if (callback) {
+            callback(!!input_elem.checked);
+        }
+    };
+    opt_elem.appendChild(input_elem);
+    opt_elem.appendChild(inner_span);
+    return opt_elem;
+}
+
 export function createChart(charts, chart_name, elem, user_opts) {
     user_opts = user_opts || {};
 
@@ -371,36 +391,20 @@ export function createChart(charts, chart_name, elem, user_opts) {
     let opts_elem = document.createElement('div');
     opts_elem.className = "chart-options";
 
-    for (let k in charts.options[chart_name]) {
-        if (!charts.options[chart_name].hasOwnProperty(k)) continue;
-        let opt_elem = document.createElement('label');
-        opt_elem.className = 'button-checkable';
-        let input_elem = document.createElement('input');
-        input_elem.type = 'checkbox';
-        input_elem.checked = chart_options[k] ? true : false;
-        let inner_span = document.createElement('span');
-        inner_span.innerHTML = i18n.tr('option_text_' + k);
-        opt_elem.title = i18n.tr('option_title_' + k);
-        if (k === 'logscale') {
-            opt_elem.onclick = function(e) {
-                charts.options[chart_name].logscale = !!input_elem.checked;
-                dygraph.updateOptions({ logscale: charts.options[chart_name].logscale });
-                e.stopPropagation();
-            }
-        } else if (k === 'accumulative') {
-            opt_elem.onclick = function(e) {
-                charts.options[chart_name].accumulative = !!input_elem.checked;
-                let values = charts.options[chart_name].accumulative ? charts.values[chart_name] : charts.per_round_values[chart_name];
-                dygraph.updateOptions({file: values});
-                e.stopPropagation();
-            }
+    if (charts.options[chart_name].hasOwnProperty('logscale')) {
+        opts_elem.appendChild(createOptionElem(charts.options[chart_name].logscale, 'logscale', function(value){
+            charts.options[chart_name].logscale = value;
+            dygraph.updateOptions({logscale: value});
+        }));
         }
-        opt_elem.appendChild(input_elem);
-        opt_elem.appendChild(inner_span);
-        opts_elem.appendChild(opt_elem);
+
+    if (charts.options[chart_name].hasOwnProperty('accumulative')) {
+        opts_elem.appendChild(createOptionElem(charts.options[chart_name].accumulative, 'accumulative', function(value){
+            charts.options[chart_name].accumulative = value;
+            dygraph.updateOptions({file: value ? charts.values[chart_name] : charts.per_round_values[chart_name]});
+        }));
     }
     
-    // opts_elem.innerHTML = '<label class="button-checkable"><input type=checkbox><span>L</span></label><label class="button-checkable"><input type=checkbox><span>A</span></label>';
     elem.appendChild(opts_elem);
 
     return dygraph;
