@@ -13,12 +13,45 @@ let charts      = utils.loadCharts({
     sellings: 'chart6',
 });
 let chart_order = ['lives', 'actions', 'kills', 'income', 'spent_creeps', 'spent_towers', 'sellings', 'money'];
-let options = {
-    accumulative: true,
-    logscale: false,
+
+let default_options = {
+    lives: {},
+    actions: {},
+    kills: {
+        // accumulative: false,
+    },
+    income: {
+        accumulative: false,
+        logscale: false,
+    },
+    spent_creeps: {
+        accumulative: true,
+        logscale: false,
+    },
+    spent_towers: {
+        accumulative: true,
+        logscale: false,
+    },
+    sellings: {
+        accumulative: true,
+        // needs to be positive to enable logscale
+        // logscale: false,
+    },
+    money: {
+        accumulative: true,
+        logscale: false,
+    },
+
+    global: {
+        display_annotations: false,
+        highlight_series: false,
+    }
 };
 
 if (charts && stats_div) {
+    // TODO: save & load options
+    charts.options = default_options;
+
     charts.heights = {
         lives: 100,
         actions: 100,
@@ -53,6 +86,7 @@ if (charts && stats_div) {
     let summary_div = document.querySelectorAll('.cbox50')[1];
 
     if (summary_div && summary_charts) {
+        summary_charts.options = {};
         summary_charts.colors = charts.colors;
         summary_charts.values = {summary: window.chart1.elements.map((x, i) => [i].concat(x.values))};
         let columns = window.chart1.elements.map((x) => x.text);

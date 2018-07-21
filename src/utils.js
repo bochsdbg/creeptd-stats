@@ -197,9 +197,18 @@ function scrollV3(event, g, context) {
 }
 
 export function createChart(charts, chart_name, elem, user_opts) {
-    if (!charts.values[chart_name]) return null;
-
     user_opts = user_opts || {};
+
+    let chart_options = {};
+    for (let k in charts.options[chart_name]) {
+        chart_options[k] = charts.options[chart_name][k];
+    }
+
+    for (let k in charts.options.global) {
+        if (!chart_options.hasOwnProperty(k)) {
+            chart_options[k] = charts.options.global[k];
+        }
+    }
 
     let labels = ['Round'].concat(charts.player_names);
 
@@ -208,11 +217,11 @@ export function createChart(charts, chart_name, elem, user_opts) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         },
 
+        logscale: chart_options.logscale ? true : false,
         labelsKMB: true,
         labels: labels,
         width: '100%',
         height: charts.heights[chart_name] ? charts.heights[chart_name] : 150,
-        // logscale: true,
         animatedZooms: true,
 
         legend: 'follow',
@@ -280,7 +289,7 @@ export function createChart(charts, chart_name, elem, user_opts) {
             new Crosshair({direction: "vertical"})
         ],
 
-        highlightSeriesOpts: { strokeWidth: 2 },
+        highlightSeriesOpts: chart_options.highlight_series ? { strokeWidth: 2 } : null,
         highlightSeriesBackgroundColor: 'rgba(0, 0, 0, 0.2)',
         highlightCircleSize: 0,
 
@@ -347,7 +356,52 @@ export function createChart(charts, chart_name, elem, user_opts) {
         if (user_opts.hasOwnProperty(k)) { opts[k] = user_opts[k]; }
     }
 
-    return new Dygraph(elem, charts.values[chart_name], opts);
+    let values = null;
+    if (chart_options.hasOwnProperty('accumulative')) {
+        values = chart_options.accumulative ? charts.values[chart_name] : charts.per_round_values[chart_name];
+    } 
+    if (!values) {
+        values =  charts.values[chart_name] ? charts.values[chart_name] :  charts.per_round_values[chart_name];
+    }
+
+    if (!values) return null;
+
+    let dygraph = new Dygraph(elem, values, opts);
+
+    let opts_elem = document.createElement('div');
+    opts_elem.className = "chart-options";
+
+    for (let k in charts.options[chart_name]) {
+        if (!charts.options[chart_name].hasOwnProperty(k)) continue;
+        let opt_elem = document.createElement('label');
+        opt_elem.className = 'button-checkable';
+        let input_elem = document.createElement('input');
+        input_elem.type = 'checkbox';
+        input_elem.checked = chart_options[k] ? true : false;
+        let inner_span = document.createElement('span');
+        inner_span.innerHTML = i18n.tr('option_text_' + k);
+        opt_elem.title = i18n.tr('option_title_' + k);
+        if (k === 'logscale') {
+            opt_elem.onclick = function(e) {
+                dygraph.updateOptions({logscale: input_elem.checked});
+                e.stopPropagation();
+            }
+        } else if (k === 'accumulative') {
+            opt_elem.onclick = function(e) {
+                let values = input_elem.checked ? charts.values[chart_name] : charts.per_round_values[chart_name];
+                dygraph.updateOptions({file: values});
+                e.stopPropagation();
+            }
+        }
+        opt_elem.appendChild(input_elem);
+        opt_elem.appendChild(inner_span);
+        opts_elem.appendChild(opt_elem);
+    }
+    
+    // opts_elem.innerHTML = '<label class="button-checkable"><input type=checkbox><span>L</span></label><label class="button-checkable"><input type=checkbox><span>A</span></label>';
+    elem.appendChild(opts_elem);
+
+    return dygraph;
 }
 
 export function countPerRoundValues(vals) {

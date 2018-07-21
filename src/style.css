@@ -171,4 +171,65 @@
 
 .chart-wrapper {
     cursor: crosshair;
+}chart-wrapper {
+    cursor: crosshair;
+}
+
+.button-checkable {
+    display: block;
+}
+
+.chart-options .button-checkable>span {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+}
+.chart-wrapper {
+    position: relative;
+    margin-right: 35px;
+}
+
+.chart-wrapper .chart-options {
+    position: absolute;
+    right: -36px;
+    top: 0;
+}
+
+.button-checkable>span {
+    border: 1px solid #555;
+    color: #555;
+    display: inline-block;
+    text-align: center;
+    line-height: 100%;
+    vertical-align: middle;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.2s all ease;
+    box-shadow: 1px 2px 2px #555;
+    user-select: none;
+    -webkit-user-select: none;
+    /* for safari & chrome browsers */
+    -moz-user-select: none;
+    /* for mozilla browsers */
+    -khtml-user-select: none;
+    /* for konqueror browsers */
+    -ms-user-select: none;
+    /* for IE10+ */
+}
+
+.button-checkable>span:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+}
+
+.button-checkable input {
+    display: none;
+}
+
+.button-checkable input:checked+span {
+    color: #fff;
+    border: 1px solid #fff;
+    box-shadow: 1px 2px 15px #fff;
 }
