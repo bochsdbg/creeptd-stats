@@ -383,12 +383,14 @@ export function createChart(charts, chart_name, elem, user_opts) {
         opt_elem.title = i18n.tr('option_title_' + k);
         if (k === 'logscale') {
             opt_elem.onclick = function(e) {
-                dygraph.updateOptions({logscale: input_elem.checked});
+                charts.options[chart_name].logscale = !!input_elem.checked;
+                dygraph.updateOptions({ logscale: charts.options[chart_name].logscale });
                 e.stopPropagation();
             }
         } else if (k === 'accumulative') {
             opt_elem.onclick = function(e) {
-                let values = input_elem.checked ? charts.values[chart_name] : charts.per_round_values[chart_name];
+                charts.options[chart_name].accumulative = !!input_elem.checked;
+                let values = charts.options[chart_name].accumulative ? charts.values[chart_name] : charts.per_round_values[chart_name];
                 dygraph.updateOptions({file: values});
                 e.stopPropagation();
             }
