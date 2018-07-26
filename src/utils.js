@@ -519,3 +519,16 @@ export function countMoney(starting_money, charts) {
     }
     return result;
 }
+
+export function countAccumulativeMoney(charts) {
+    let result = new Array(charts.rounds_count);
+    for (let round_num = 0; round_num < charts.rounds_count; ++round_num) {
+        let row = new Array(charts.players_count + 1);
+        row[0] = round_num;
+        for (let i = 1; i <= charts.players_count; ++i) {
+            row[i] = charts.per_round_values.money[round_num][i] + charts.values.spent_creeps[round_num][i] + charts.values.spent_towers[round_num][i];
+        }
+        result[round_num] = row;
+    }
+    return result;
+}

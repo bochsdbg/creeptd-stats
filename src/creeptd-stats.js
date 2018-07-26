@@ -40,7 +40,7 @@ let default_options = {
         // logscale: false,
     },
     money: {
-        accumulative: true,
+        accumulative: false,
         logscale: false,
     },
 
@@ -72,7 +72,8 @@ if (charts && stats_div) {
     charts.values.actions = utils.countAccumulativeValues(charts.values.actions);
     charts.values.kills = utils.countAccumulativeValues(charts.values.kills);
 
-    charts.values.money = utils.countMoney(200, charts);
+    charts.per_round_values.money = utils.countMoney(200, charts);
+    charts.values.money = utils.countAccumulativeMoney(charts);
 
     // charts.values.spent_creeps = per_round_values.spent_creeps;
     // charts.values.spent_towers = per_round_values.spent_towers;
