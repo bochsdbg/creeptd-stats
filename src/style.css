@@ -21,6 +21,7 @@
 
 .dygraph-legend table {
     border-collapse: collapse;
+    background: #ffffff22;
 }
 
 .dygraph-legend table th, .dygraph-legend table td {
