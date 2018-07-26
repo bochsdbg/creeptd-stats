@@ -14,6 +14,9 @@ const messages = {
         "option_text_logscale": { "message": "L" },
         "option_title_highlight_series": { "message": "" },
         "option_text_highlight_series": { "message": "Highlight current series" },
+        "option_title_show_annotations": { "message": "" },
+        "option_text_show_annotations": { "message": "Show annotations" },
+        "annotations_lost_lifes": { "message": "Lost lifes: {lost_lifes}" }
     },
 }
 
@@ -26,10 +29,20 @@ export function setLocale(locale) {
     }
 }
 
-export function tr(msg) {
-    if (messages[current_locale].hasOwnProperty(msg)) {
-        return messages[current_locale][msg].message;
-    } else {
-        return messages[default_locale].hasOwnProperty('msg') ? messages[default_locale][msg].message : msg;
+function format(str, args) {
+    let result = str.toString();
+    for (let key in args) {
+        result = result.replace(new RegExp('\\{' + key + '\\}', 'gi'), args[key]);
     }
+    return result;
+}
+
+export function tr(msg, args) {
+    let message = null;
+    if (messages[current_locale].hasOwnProperty(msg)) {
+        message = messages[current_locale][msg].message;
+    } else {
+        message = messages[default_locale].hasOwnProperty('msg') ? messages[default_locale][msg].message : msg;
+    }
+    return format(message, args);
 }

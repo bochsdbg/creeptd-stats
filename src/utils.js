@@ -133,6 +133,8 @@ export function loadCharts(charts) {
     let src_datas = {};
     let player_names = [];
     let colors = [];
+    let annotations = [];
+    let annotations_loaded = false;
 
     let has_data = false;
 
@@ -183,9 +185,19 @@ export function loadCharts(charts) {
             data[round] = [round];
             for (let player = 0; player < players_count; ++player) {
                 let val = elements[player].values[round];
-                data[round][player + 1] = !val || !val.hasOwnProperty("value") ? val : val.value;
+                if (!val || !val.hasOwnProperty("value")) {
+                    data[round][player + 1] = val;
+                } else {
+                    if (val.tip && !annotations_loaded) {
+                        let lost_lifes = val.tip.match(/(\d+)\)/);
+                        annotations.push({ series: player_names[player], x: round, tickHeight: 0, tickWidth: 0, width: 4, height: 4, text: i18n.tr('annotations_lost_lifes', {lost_lifes: lost_lifes[1]})});
+                    }
+                    data[round][player + 1] = val.value;
+                } 
             }
         }
+
+        annotations_loaded = annotations.length !== 0;
     }
 
     return {
@@ -194,6 +206,7 @@ export function loadCharts(charts) {
         values: values,
         player_names: player_names,
         colors: colors,
+        annotations: annotations,
         heights: Array(players_count).fill(null)
     };
 }
@@ -407,6 +420,9 @@ export function createChart(charts, chart_name, elem, user_opts) {
     if (!values) return null;
 
     let dygraph = new Dygraph(elem, values, opts);
+    if (chart_options.show_annotations && charts.annotations) {
+        dygraph.ready(() => dygraph.setAnnotations(charts.annotations));
+    }
 
     let opts_elem = document.createElement("div");
     opts_elem.className = "chart-options";

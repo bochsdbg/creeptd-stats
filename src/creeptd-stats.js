@@ -43,7 +43,7 @@ let default_options = {
     },
 
     global: {
-        display_annotations: false,
+        show_annotations: true,
         highlight_series: false,
     }
 };
@@ -92,6 +92,17 @@ if (charts && stats_div) {
         charts.options.global.highlight_series = value;
         for (let i = 0; i < gs.length; ++i) {
             gs[i].updateOptions({ highlightSeriesOpts: value ? utils.highlightSeriesOpts : null }, true);
+        }
+    }));
+
+    global_options.appendChild(utils.createOptionElem(charts.options.global.show_annotations, 'show_annotations', function(value){
+        charts.options.global.show_annotations = value;
+        for (let i = 0; i < gs.length; ++i) {
+            if (value) {
+                gs[i].setAnnotations(charts.annotations);
+            } else {
+                gs[i].setAnnotations([]);
+            }
         }
     }));
 
