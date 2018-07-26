@@ -19,6 +19,16 @@
     overflow: hidden;
 }
 
+.dygraph-legend table {
+    border-collapse: collapse;
+}
+
+.dygraph-legend table th, .dygraph-legend table td {
+    padding: 0 2px !important;
+    margin: 0;
+    border: none transparent;
+}
+
 /* styles for a solid line in the legend */
 
 .dygraph-legend-line {

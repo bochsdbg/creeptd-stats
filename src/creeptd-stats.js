@@ -84,7 +84,36 @@ if (charts && stats_div) {
         let div = document.createElement('div');
         div.className = 'chart-wrapper';
         stats_div.appendChild(div);
-        return utils.createChart(charts, chart_name, div);
+        return utils.createChart(charts, chart_name, div, {
+            legendFormatter: function(data) {
+                if (data.x == null) {
+                    return "";
+                }
+    
+                let html = '<table><tr><th>' + data.xHTML + "</th>";
+                data.series.forEach(series => {
+                    if (!series.isVisible) return;
+                    let style = 'color:' + series.color;
+                    if (series.isHighlighted) {
+                        style += "; font-weight: bold";
+                    }
+                    html += '<th style="' + style + '">' + series.labelHTML + '</th>';
+                });
+                html += '</tr>';
+
+                html += '<tr><td></td>';
+                data.series.forEach(series => {
+                    if (!series.isVisible) return;
+                    let style = "color: " + series.color;
+                    if (series.isHighlighted) {
+                        style += "; font-weight: bold";
+                    }
+                    html += '<td style="' + style + '">' + series.yHTML + "</td> ";
+                });
+                html += '</tr>'
+                return html;
+            },
+        });
     });
     gs = gs.filter((x) => x != null);
 
