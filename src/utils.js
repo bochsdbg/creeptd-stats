@@ -464,6 +464,18 @@ export function countPerRoundValues(vals) {
     return result;
 }
 
+export function countAccumulativeValues(vals) {
+    if (!vals || !vals[0]) return null;
+    let result = [vals[0]];
+    for (let round_num = 1; round_num < vals.length; ++round_num) {
+        result[round_num] = [vals[round_num][0]];
+        for (let i = 1; i < vals[round_num].length; ++i) {
+            result[round_num][i] = vals[round_num][i] + result[round_num - 1][i];
+        }
+    }
+    return result;
+}
+
 export function countMoney(starting_money, charts) {
     let accumulated_vals = charts.values;
     let per_round_values = charts.per_round_values;

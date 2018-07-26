@@ -16,9 +16,11 @@ let chart_order = ['lives', 'actions', 'kills', 'income', 'spent_creeps', 'spent
 
 let default_options = {
     lives: {},
-    actions: {},
+    actions: {
+        accumulative: false,
+    },
     kills: {
-        // accumulative: false,
+        accumulative: false,
     },
     income: {
         accumulative: true,
@@ -59,11 +61,16 @@ if (charts && stats_div) {
     };
 
     charts.per_round_values = {
+        actions: charts.values.actions,
+        kills: charts.values.kills,
         income: utils.countPerRoundValues(charts.values.income),
         spent_creeps: utils.countPerRoundValues(charts.values.spent_creeps),
         spent_towers: utils.countPerRoundValues(charts.values.spent_towers),
         sellings: utils.countPerRoundValues(charts.values.sellings),
     };
+
+    charts.values.actions = utils.countAccumulativeValues(charts.values.actions);
+    charts.values.kills = utils.countAccumulativeValues(charts.values.kills);
 
     charts.values.money = utils.countMoney(200, charts);
 
