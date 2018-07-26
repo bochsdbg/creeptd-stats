@@ -36,8 +36,7 @@ let default_options = {
     },
     sellings: {
         accumulative: true,
-        // needs to be positive to enable logscale
-        // logscale: false,
+        logscale: false,
     },
     money: {
         accumulative: false,
@@ -60,6 +59,7 @@ if (charts && stats_div) {
         kills: 100,
     };
 
+    charts.values.sellings = utils.invertValues(charts.values.sellings);
     charts.per_round_values = {
         actions: charts.values.actions,
         kills: charts.values.kills,

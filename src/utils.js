@@ -532,3 +532,16 @@ export function countAccumulativeMoney(charts) {
     }
     return result;
 }
+
+export function invertValues(values) {
+    let result = new Array(values.length);
+    for (let round_num = 0; round_num < values.length; ++round_num) {
+        let row = new Array(values[round_num].length);
+        row[0] = round_num;
+        for (let i = 1; i < values[round_num].length; ++i) {
+            row[i] = -values[round_num][i];
+        }
+        result[round_num] = row;
+    }
+    return result;
+}
