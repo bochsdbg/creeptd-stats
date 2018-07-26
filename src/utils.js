@@ -481,9 +481,8 @@ export function countMoney(starting_money, charts) {
     let per_round_values = charts.per_round_values;
 
     let income = accumulated_vals.income;
-    if (!income) return null;
-    let rounds_count = income.length;
-    let row_size = income[0].length;
+    let rounds_count = charts.rounds_count;
+    let row_size = charts.players_count + 1;
 
     let prev_row = Array(row_size).fill(starting_money);
     let result = Array(rounds_count);
@@ -493,7 +492,7 @@ export function countMoney(starting_money, charts) {
         row[0] = round_num;
 
         for (let i = 1; i < row_size; ++i) {
-            let money_got = income[round_num][i] + Math.abs(per_round_values.sellings[round_num][i]);
+            let money_got = (income ? income[round_num][i] : 0) + Math.abs(per_round_values.sellings[round_num][i]);
             let spent_creeps = per_round_values.spent_creeps ? per_round_values.spent_creeps[round_num][i] : 0;
             let spent_towers = per_round_values.spent_towers ? per_round_values.spent_towers[round_num][i] : 0;
             let money_for_killing = 0;
@@ -505,7 +504,7 @@ export function countMoney(starting_money, charts) {
             money_got += money_for_killing;
             let investment = per_round_values.spent_creeps
                 ? 0
-                : per_round_values.income[round_num + 1]
+                : (per_round_values.income && per_round_values.income[round_num + 1])
                     ? per_round_values.income[round_num + 1][i] * 10
                     : 0;
             let money_spent = spent_towers + spent_creeps + investment;
@@ -526,7 +525,7 @@ export function countAccumulativeMoney(charts) {
         let row = new Array(charts.players_count + 1);
         row[0] = round_num;
         for (let i = 1; i <= charts.players_count; ++i) {
-            row[i] = charts.per_round_values.money[round_num][i] + charts.values.spent_creeps[round_num][i] + charts.values.spent_towers[round_num][i];
+            row[i] = charts.per_round_values.money[round_num][i] + (charts.values.spent_creeps ? charts.values.spent_creeps[round_num][i] : 0) + charts.values.spent_towers[round_num][i];
         }
         result[round_num] = row;
     }
