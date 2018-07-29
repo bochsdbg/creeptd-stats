@@ -13,4 +13,4 @@ Also, it adds some features:
 ## Extension links
 
 - https://chrome.google.com/webstore/detail/creeptd-statistics/cnedkcjfahpfmedpflodpcdbgigoenda
-- https://addons.mozilla.org/en-US/firefox/addon/creeptd-statistics/
+- https://addons.mozilla.org/addon/creeptd-statistics/
