@@ -107,15 +107,10 @@ export function multiColumnBarPlotter(e) {
         ctx.fillStyle = fillColors[j];
         ctx.strokeStyle = strokeColors[j];
 
-        let y_height_max = 0;
-        for (var i = 0; i < sets[j].length; i++) {
-            y_height_max = Math.max(y_height_max, y_bottom - sets[j][i].canvasy);
-        }
-
         for (var i = 0; i < sets[j].length; i++) {
             let p = sets[j][i];
             let center_x = p.canvasx;
-            let x_left = center_x - (bar_width / 2) * (1 - j / (sets.length - 1));
+            let x_left = center_x - bar_width * (0.5 - j / sets.length);
             // ctx.fillRect(x_left, p.canvasy, bar_width/sets.length, y_bottom - p.canvasy);
             let y = y_bottom - (p.yval / (max_yvals[i] + 0.1)) * y_bottom;
             ctx.strokeRect(x_left, y, bar_width / sets.length, y_bottom - y);
