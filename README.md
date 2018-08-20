@@ -14,3 +14,9 @@ Also, it adds some features:
 
 - https://chrome.google.com/webstore/detail/creeptd-statistics/cnedkcjfahpfmedpflodpcdbgigoenda
 - https://addons.mozilla.org/addon/creeptd-statistics/
+
+## Building
+
+- Install inkscape (https://inkscape.org/), ninja-build (https://ninja-build.org/), nodejs (https://nodejs.org), zip utility. Add them to your path, if necessary
+- Run `npm install`
+- Run `ninja`
