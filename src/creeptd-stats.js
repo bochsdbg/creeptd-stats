@@ -51,8 +51,7 @@ let default_options = {
 };
 
 if (charts && stats_div) {
-    // TODO: save & load options
-    charts.options = default_options;
+    charts.options = utils.loadOptions(default_options);
 
     charts.heights = {
         lives: 100,
@@ -132,6 +131,7 @@ if (charts && stats_div) {
         for (let i = 0; i < gs.length; ++i) {
             gs[i].updateOptions({ highlightSeriesOpts: value ? utils.highlightSeriesOpts : null }, true);
         }
+        utils.saveOptions(charts.options);
     }));
 
     global_options.appendChild(utils.createOptionElem(charts.options.global.show_annotations, 'show_annotations', function(value){
@@ -143,6 +143,7 @@ if (charts && stats_div) {
                 gs[i].setAnnotations([]);
             }
         }
+        utils.saveOptions(charts.options);
     }));
 
     global_options.appendChild(utils.createOptionElem(charts.options.global.legend_at_right_side, 'legend_at_right_side', function(value){
@@ -159,6 +160,7 @@ if (charts && stats_div) {
             }
             gs[i].updateOptions({ legend: value ? 'onmouseover' : 'follow', }, true);
         }
+        utils.saveOptions(charts.options);
     }));
 
     synchronize(gs, {selection: true, zoom: true, range: false});

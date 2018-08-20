@@ -427,6 +427,7 @@ export function createChart(charts, chart_name, elem, user_opts) {
             createOptionElem(charts.options[chart_name].logscale, "logscale", function(value) {
                 charts.options[chart_name].logscale = value;
                 dygraph.updateOptions({ logscale: value });
+                saveOptions(charts.options);
             })
         );
     }
@@ -438,6 +439,7 @@ export function createChart(charts, chart_name, elem, user_opts) {
                 dygraph.updateOptions({
                     file: value ? charts.values[chart_name] : charts.per_round_values[chart_name]
                 });
+                saveOptions(charts.options);
             })
         );
     }
@@ -538,4 +540,31 @@ export function invertValues(values) {
         result[round_num] = row;
     }
     return result;
+}
+
+export function mergeObjects(dest, src) {
+    Object.keys(src).forEach(function(key){
+        if (src[key] instanceof Object && dest[key] instanceof Object) {
+            dest[key] = mergeObjects(dest[key], src[key]);
+        } else {
+            dest[key] = src[key];
+        }
+    });
+    return dest;
+}
+
+export function loadOptions(defaults) {
+    let storage = window.localStorage;
+    if (!storage) return defaults;
+    let options = storage.getItem('ctd_stat_charts_options__');
+    if (!options) return defaults;
+    options = JSON.parse(options);
+    let result = mergeObjects({}, defaults);
+    return mergeObjects(result, options);
+}
+
+export function saveOptions(options) {
+    let storage = window.localStorage;
+    if (!storage) return;
+    storage.setItem('ctd_stat_charts_options__', JSON.stringify(options));
 }
