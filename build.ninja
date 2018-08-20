@@ -5,13 +5,16 @@ rule jsmin
     command = npx webpack --mode production -o $out  --entry ./$in --silent
 
 rule cssmin
-    command = cssnano $in $out
+    command = npx cssnano $in $out
 
 rule svgrender
     command = inkscape -z -e $out $in -w $$(basename -s .png $out) -h $$(basename -s .png $out) >/dev/null && optipng -o7 $out -silent
 
 rule zip
     command = rm -f $out && bsdtar cvf $out --strip-components 1 -a $in 2>/dev/null
+
+rule git-archive
+    command = git archive --format=zip -o $out master
 
 build dist/manifest.json: copy src/manifest.json
 
@@ -32,3 +35,4 @@ build dist/style.css: cssmin src/style.css
 build dist/_locales: copy src/_locales
 
 build creeptd-stats.zip: zip dist/manifest.json dist/creeptd-stats.js dist/inject.js dist/style.css dist/icons/16.png dist/icons/24.png dist/icons/32.png dist/icons/48.png dist/icons/64.png dist/icons/96.png dist/icons/128.png dist/icons/256.png dist/_locales
+build creeptd-stats-src.zip: git-archive
