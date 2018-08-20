@@ -272,7 +272,7 @@ export function createChart(charts, chart_name, elem, user_opts) {
         height: charts.heights[chart_name] ? charts.heights[chart_name] : 150,
         animatedZooms: true,
 
-        legend: "follow",
+        // legend: "follow",
         // labelsDiv: labelsDiv,
         labelsSeparateLines: false,
 

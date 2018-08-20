@@ -46,6 +46,7 @@ let default_options = {
     global: {
         show_annotations: true,
         highlight_series: false,
+        legend_at_right_side: true,
     }
 };
 
@@ -93,6 +94,7 @@ if (charts && stats_div) {
         div.className = 'chart-wrapper';
         stats_div.appendChild(div);
         return utils.createChart(charts, chart_name, div, {
+            legend: charts.options.global.legend_at_right_side ? 'onmouseover' : 'follow',
             legendFormatter: function(data) {
                 if (data.x == null) {
                     return "";
@@ -140,6 +142,22 @@ if (charts && stats_div) {
             } else {
                 gs[i].setAnnotations([]);
             }
+        }
+    }));
+
+    global_options.appendChild(utils.createOptionElem(charts.options.global.legend_at_right_side, 'legend_at_right_side', function(value){
+        charts.options.global.legend_at_right_side = value;
+        for (let i = 0; i < gs.length; ++i) {
+            if (value) {
+                let legend = gs[i].maindiv_.querySelector('.dygraph-legend');
+                if (legend != null) {
+                    let area = gs[i].getArea();
+                    let labelsDivWidth = legend.offsetWidth;
+                    legend.style.left = area.x + area.w - labelsDivWidth - 1 + "px";
+                    legend.style.top = area.y + "px";
+                }
+            }
+            gs[i].updateOptions({ legend: value ? 'onmouseover' : 'follow', }, true);
         }
     }));
 

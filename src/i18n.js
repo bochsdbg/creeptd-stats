@@ -12,11 +12,16 @@ const messages = {
         "option_text_accumulative": { "message": "A" },
         "option_title_logscale": { "message": "Logarithmic scale" },
         "option_text_logscale": { "message": "L" },
-        "option_title_highlight_series": { "message": "" },
-        "option_text_highlight_series": { "message": "Highlight current series" },
-        "option_title_show_annotations": { "message": "" },
-        "option_text_show_annotations": { "message": "Show annotations" },
-        "annotations_lost_lifes": { "message": "Lost lifes: {lost_lifes}" }
+
+        "option_title_highlight_series": { "message": "Highlight current series" },
+        "option_text_highlight_series": { "message": "H" },
+
+        "option_title_show_annotations": { "message": "Show \"lives lost\" annotations" },
+        "option_text_show_annotations": { "message": "A" },
+        "annotations_lost_lifes": { "message": "Lost lifes: {lost_lifes}" },
+
+        "option_title_legend_at_right_side": { "message": "Show charts' values on the right side" },
+        "option_text_legend_at_right_side": { "message": "R" },
     },
 }
 
