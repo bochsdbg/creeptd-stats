@@ -5,7 +5,7 @@
 .dygraph-legend {
     position: absolute;
     font-size: 14px;
-    z-index: 10;
+    z-index: 101;
     /* width: 250px;   labelsDivWidth */
     /*
     dygraphs determines these based on the presence of chart labels.
@@ -17,11 +17,17 @@
     line-height: normal;
     text-align: left;
     overflow: hidden;
+
+    box-shadow: 1px 1px 2px #fff;
+    border: 1px #fff;
+    border-style: solid;
+    background: #000000aa;
 }
 
 .dygraph-legend table {
     border-collapse: collapse;
-    background: #00000055;
+    
+    
 }
 
 .dygraph-legend table th, .dygraph-legend table td {
