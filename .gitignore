@@ -1,4 +1,4 @@
 .ninja_*
 node_modules/
 dist/
-creeptd-stats.zip
+*.zip
