@@ -85,7 +85,7 @@ if (charts && stats_div) {
     stats_div.appendChild(global_options);
     let stat_info_elem = document.createElement('p');
     stat_info_elem.className = 'stat-info';
-    stat_info_elem.innerHTML = 'Mouse wheel on charts for zooming, click and drag for panning, double click for toggling logarithmic scale';
+    stat_info_elem.innerHTML = 'Mouse wheel on charts for zooming, click and drag for panning';
     stats_div.appendChild(stat_info_elem);
 
     let gs = chart_order.map(function(chart_name) {
