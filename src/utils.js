@@ -312,7 +312,7 @@ export function createChart(charts, chart_name, elem, user_opts) {
 
     let opts = {
         valueFormatter: function(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return x.toFixed(3).replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace(/\.000$/g, '');
         },
 
         logscale: chart_options.logscale ? true : false,
