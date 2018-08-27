@@ -294,6 +294,27 @@ export function createOptionElem(initial_value, option_name, callback) {
     return opt_elem;
 }
 
+export function getDataSource(charts, chart_name) {
+    let opts = charts.options[chart_name];
+    if (opts.diffview) {
+        return charts.diffvalues[chart_name];
+    } else if (opts.accumulative) {
+        return charts.values[chart_name];
+    } else {
+        return charts.per_round_values[chart_name];
+    }
+}
+
+export function updateOption(option_name, option_value, dygraph, chart_name, charts) {
+    charts.options[chart_name][option_name] = option_value;
+    if (option_name === 'logscale') {
+        dygraph.updateOptions({ logscale: option_value });
+    } else {
+        dygraph.updateOptions({ file: getDataSource(charts, chart_name) });
+    }
+    saveOptions(charts.options);
+}
+
 export function createChart(charts, chart_name, elem, user_opts) {
     user_opts = user_opts || {};
 
@@ -454,14 +475,7 @@ export function createChart(charts, chart_name, elem, user_opts) {
         }
     }
 
-    let values = null;
-    if (chart_options.hasOwnProperty("accumulative")) {
-        values = chart_options.accumulative ? charts.values[chart_name] : charts.per_round_values[chart_name];
-    }
-    if (!values) {
-        values = charts.values[chart_name] ? charts.values[chart_name] : charts.per_round_values[chart_name];
-    }
-
+    let values = getDataSource(charts, chart_name);
     if (!values) return null;
 
     let dygraph = new Dygraph(elem, values, opts);
@@ -475,9 +489,7 @@ export function createChart(charts, chart_name, elem, user_opts) {
     if (chart_options.hasOwnProperty("logscale")) {
         opts_elem.appendChild(
             createOptionElem(charts.options[chart_name].logscale, "logscale", function(value) {
-                charts.options[chart_name].logscale = value;
-                dygraph.updateOptions({ logscale: value });
-                saveOptions(charts.options);
+                updateOption('logscale', value, dygraph, chart_name, charts);
             })
         );
     }
@@ -485,11 +497,15 @@ export function createChart(charts, chart_name, elem, user_opts) {
     if (chart_options.hasOwnProperty("accumulative")) {
         opts_elem.appendChild(
             createOptionElem(charts.options[chart_name].accumulative, "accumulative", function(value) {
-                charts.options[chart_name].accumulative = value;
-                dygraph.updateOptions({
-                    file: value ? charts.values[chart_name] : charts.per_round_values[chart_name]
-                });
-                saveOptions(charts.options);
+                updateOption('accumulative', value, dygraph, chart_name, charts);
+            })
+        );
+    }
+
+    if (chart_options.hasOwnProperty("diffview")) {
+        opts_elem.appendChild(
+            createOptionElem(charts.options[chart_name].diffview, "diffview", function(value) {
+                updateOption('diffview', value, dygraph, chart_name, charts);
             })
         );
     }
@@ -518,6 +534,28 @@ export function countAccumulativeValues(vals) {
         result[round_num] = [vals[round_num][0]];
         for (let i = 1; i < vals[round_num].length; ++i) {
             result[round_num][i] = vals[round_num][i] + result[round_num - 1][i];
+        }
+    }
+    return result;
+}
+
+export function countDiffValues(vals) {
+    if (!vals || !vals[0]) return null;
+    let result = [vals[0]];
+
+    for (let round_num = 0; round_num < vals.length; ++round_num) {
+        result[round_num] = [vals[round_num][0]];
+        let mean = 1.0;
+        let count = 0;
+        for (let j = 1; j < vals[round_num].length; ++j) {
+            if (vals[round_num][j]) {
+                mean *= vals[round_num][j];
+                count++;
+            }
+        }
+        mean = Math.pow(mean, 1 / count);
+        for (let j = 1; j < vals[round_num].length; ++j) {
+            result[round_num][j] = vals[round_num][j] / mean;
         }
     }
     return result;

@@ -1,7 +1,6 @@
 import synchronize from '../third-party/dygraphs/src/extras/synchronizer';
 import * as utils from './utils';
 import * as i18n from './i18n';
-
 let stats_div   = document.querySelectorAll('.cboxfull.boldbox')[1];
 let charts      = utils.loadCharts({
     lives: 'chart2',
@@ -25,18 +24,22 @@ let default_options = {
     income: {
         accumulative: true,
         logscale: false,
+        diffview: false,
     },
     spent_creeps: {
         accumulative: true,
         logscale: false,
+        diffview: false,
     },
     spent_towers: {
         accumulative: true,
         logscale: false,
+        diffview: false,
     },
     sellings: {
         accumulative: true,
         logscale: false,
+        diffview: false,
     },
     money: {
         accumulative: false,
@@ -74,6 +77,13 @@ if (charts && stats_div) {
 
     charts.per_round_values.money = utils.countMoney(200, charts);
     charts.values.money = utils.countAccumulativeMoney(charts);
+
+    charts.diffvalues = {
+        income: utils.countDiffValues(charts.values.income),
+        spent_creeps: utils.countDiffValues(charts.values.spent_creeps),
+        spent_towers: utils.countDiffValues(charts.values.spent_towers),
+        sellings: utils.countDiffValues(charts.values.sellings),
+    }
 
     // charts.values.spent_creeps = per_round_values.spent_creeps;
     // charts.values.spent_towers = per_round_values.spent_towers;

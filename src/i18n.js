@@ -8,10 +8,13 @@ const messages = {
         "chart_title_spent_towers": { "message": "Spent for towers" },
         "chart_title_sellings": { "message": "Sellings" },
         "chart_title_money": { "message": "Money" },
+
         "option_title_accumulative": { "message": "Accumulative" },
         "option_text_accumulative": { "message": "A" },
         "option_title_logscale": { "message": "Logarithmic scale" },
         "option_text_logscale": { "message": "L" },
+        "option_title_diffview": { "message": "Difference view" },
+        "option_text_diffview": { "message": "D" },
 
         "option_title_highlight_series": { "message": "Highlight current series" },
         "option_text_highlight_series": { "message": "H" },
