@@ -258,7 +258,7 @@ function scrollV3(event, g, context) {
     // }
     let delta = normalizeWheel(event);
     
-    let normal = -2 * delta.spinY;
+    let normal = -5 * delta.spinY;
     // console.log('DeltaY: ', normal);
     // console.log('DeltaMode: ', event.deltaMode);
     // For me the normalized value shows 0.075 for one click. If I took
