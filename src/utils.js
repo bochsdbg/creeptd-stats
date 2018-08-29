@@ -296,12 +296,12 @@ export function createOptionElem(initial_value, option_name, callback) {
 
 export function getDataSource(charts, chart_name) {
     let opts = charts.options[chart_name];
-    if (opts.diffview) {
+    if (opts && opts.hasOwnProperty('diffview') && opts.diffview) {
         return charts.diffvalues[chart_name];
-    } else if (opts.accumulative) {
-        return charts.values[chart_name];
-    } else {
+    } else if (opts && opts.hasOwnProperty('accumulative') && !opts.accumulative) {
         return charts.per_round_values[chart_name];
+    } else {
+        return charts.values[chart_name];
     }
 }
 
