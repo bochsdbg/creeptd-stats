@@ -75,8 +75,8 @@ if (charts && stats_div) {
     charts.values.actions = utils.countAccumulativeValues(charts.values.actions);
     charts.values.kills = utils.countAccumulativeValues(charts.values.kills);
 
-    charts.per_round_values.money = utils.countMoney(200, charts);
     charts.values.money = utils.countAccumulativeMoney(charts);
+    charts.per_round_values.money = utils.countMoney(200, charts);
 
     charts.diffvalues = {
         income: utils.countDiffValues(charts.values.income),

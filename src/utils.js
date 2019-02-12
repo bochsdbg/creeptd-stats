@@ -577,25 +577,27 @@ export function countMoney(starting_money, charts) {
         row[0] = round_num;
 
         for (let i = 1; i < row_size; ++i) {
-            let money_got = (income ? income[round_num][i] : 0) + Math.abs(per_round_values.sellings[round_num][i]);
-            let spent_creeps = per_round_values.spent_creeps ? per_round_values.spent_creeps[round_num][i] : 0;
-            let spent_towers = per_round_values.spent_towers ? per_round_values.spent_towers[round_num][i] : 0;
+            // let money_got = (income ? income[round_num][i] : 0) + Math.abs(per_round_values.sellings[round_num][i]);
+            let money_total = accumulated_vals.money ? accumulated_vals.money[round_num][i] : 0;
+            let spent_creeps = accumulated_vals.spent_creeps ? accumulated_vals.spent_creeps[round_num][i] : 0;
+            let spent_towers = accumulated_vals.spent_towers ? accumulated_vals.spent_towers[round_num][i] : 0;
+            let investment = accumulated_vals.spent_creeps
+                ? 0
+                : (accumulated_vals.income && accumulated_vals.income[round_num + 1])
+                    ? (accumulated_vals.income[round_num + 1][i] - 200) * 10
+                    : 0;
             let money_for_killing = 0;
             for (let k = 1; k < row_size; ++k) {
-                if (i !== k && per_round_values.spent_creeps && per_round_values.spent_creeps[round_num][k]) {
-                    money_for_killing += per_round_values.income[round_num][k] || 0;
+                if (i !== k && accumulated_vals.spent_creeps && accumulated_vals.spent_creeps[round_num][k]) {
+                    money_for_killing += accumulated_vals.income[round_num][k] || 0;
                 }
             }
-            money_got += money_for_killing;
-            let investment = per_round_values.spent_creeps
-                ? 0
-                : (per_round_values.income && per_round_values.income[round_num + 1])
-                    ? per_round_values.income[round_num + 1][i] * 10
-                    : 0;
+            // money_got += money_for_killing;
             let money_spent = spent_towers + spent_creeps + investment;
-            let new_val = prev_row[i] + money_got - money_spent;
-            row[i] = Math.max(new_val, 0);
-            // row[i] = new_val;
+            let new_val = money_total + money_for_killing - money_spent + Math.abs(accumulated_vals.sellings[round_num][i]);
+            // row[i] = Math.max(new_val, 0);
+            row[i] = new_val;
+
         }
 
         result[round_num] = row;
@@ -606,12 +608,21 @@ export function countMoney(starting_money, charts) {
 
 export function countAccumulativeMoney(charts) {
     let result = new Array(charts.rounds_count);
-    for (let round_num = 0; round_num < charts.rounds_count; ++round_num) {
+    result[0] = new Array(charts.players_count + 1);
+    result[0][0] = 0;
+    for (let i = 1; i <= charts.players_count; ++i) {
+        result[0][i] = 200 + (charts.values.income ? charts.values.income[0][i] : 0);
+    }
+
+    for (let round_num = 1; round_num < charts.rounds_count; ++round_num) {
         let row = new Array(charts.players_count + 1);
         row[0] = round_num;
         for (let i = 1; i <= charts.players_count; ++i) {
-            row[i] = charts.per_round_values.money[round_num][i] + (charts.values.spent_creeps ? charts.values.spent_creeps[round_num][i] : 0) + charts.values.spent_towers[round_num][i];
+            row[i] = result[round_num - 1][i] + (charts.values.income ? charts.values.income[round_num][i] : 0);
         }
+        // for (let i = 1; i <= charts.players_count; ++i) {
+        //     row[i] = charts.per_round_values.money[round_num][i] + (charts.values.spent_creeps ? charts.values.spent_creeps[round_num][i] : 0) + charts.values.spent_towers[round_num][i];
+        // }
         result[round_num] = row;
     }
     return result;
