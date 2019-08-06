@@ -1,5 +1,5 @@
 rule copy
-    command = cp -r $in $out
+    command = cp -rT $in $out
 
 rule jsmin
     command = npx webpack --mode production -o $out  --entry ./$in --silent
@@ -32,7 +32,7 @@ build dist/inject.js: jsmin src/inject.js
 
 build dist/style.css: cssmin src/style.css
 
-build dist/_locales: copy src/_locales
+build dist/_locales: copy src/_locales | src/_locales/en/messages.json
 
 build creeptd-stats.zip: zip dist/manifest.json dist/creeptd-stats.js dist/inject.js dist/style.css dist/icons/16.png dist/icons/24.png dist/icons/32.png dist/icons/48.png dist/icons/64.png dist/icons/96.png dist/icons/128.png dist/icons/256.png dist/_locales
 build creeptd-stats-src.zip: git-archive creeptd-stats.zip

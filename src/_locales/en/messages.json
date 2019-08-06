@@ -1,10 +1,8 @@
 {
     "extensionName": {
-        "message": "CreepTD Statistics",
-        "description": "Name of the extension."
+        "message": "CreepTD Statistics"
     },
     "extensionDescription": {
-        "message": "Replaces flash with pure JS-based charts on game statistics pages and makes them better",
-        "description": "Description of the extension."
+        "message": "Replaces flash with pure JS-based charts on game statistics pages and makes them better"
     }
 }
