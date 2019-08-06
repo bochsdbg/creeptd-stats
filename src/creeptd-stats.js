@@ -44,6 +44,7 @@ let default_options = {
     money: {
         accumulative: false,
         logscale: false,
+		diffview: false,
     },
 
     global: {
@@ -83,7 +84,9 @@ if (charts && stats_div) {
         spent_creeps: utils.countDiffValues(charts.values.spent_creeps),
         spent_towers: utils.countDiffValues(charts.values.spent_towers),
         sellings: utils.countDiffValues(charts.values.sellings),
-    }
+    };
+
+	charts.diffvalues.money = utils.countDiffValues(charts.values.money);
 
     // charts.values.spent_creeps = per_round_values.spent_creeps;
     // charts.values.spent_towers = per_round_values.spent_towers;
