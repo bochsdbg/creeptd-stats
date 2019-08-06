@@ -5,9 +5,9 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
-    "cssnano": "^4.1.8",
-    "webpack": "^4.29.3",
-    "webpack-cli": "^3.2.3"
+    "cssnano": "^4.1.10",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
