@@ -20,7 +20,7 @@
     "content_scripts": [
         {
             "matches": [
-                "*://*.creeptd.com/*/games/*"
+                "*://*.creeptd.com/*"
             ],
             "js": [
                 "inject.js"

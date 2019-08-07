@@ -54,7 +54,7 @@ let default_options = {
     }
 };
 
-if (charts && stats_div) {
+if (charts && stats_div && /\/[^\/]+\/games\/\w+/.test(window.location.pathname)) {
     charts.options = utils.loadOptions(default_options);
 
     charts.heights = {
@@ -213,4 +213,13 @@ if (charts && stats_div) {
             }
         });
     }
+}
+
+let elems = document.querySelectorAll('.scrollbar-track,.scrollbar-container');
+for (const el of elems) {
+    for (const ev_name of ['mousewheel', 'DOMMouseScroll']) {
+        el.addEventListener(ev_name, function(e){
+            e.preventDefault();
+        }, {capture: true, passive: false});
+    } 
 }
